@@ -870,6 +870,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnGuardarProveedor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGuardarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarProveedor.setText("GUARDAR");
+        btnGuardarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProveedorActionPerformed(evt);
+            }
+        });
 
         btnActualizarProveedor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnActualizarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
@@ -1235,8 +1240,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                         .addComponent(btnExcelProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
-                        .addComponent(txtIdProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(txtIdProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(60, 60, 60)
@@ -1670,6 +1674,15 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         LimpiarTabla();
         ListarUsuarios();
     }//GEN-LAST:event_jTabbedPane2MouseClicked
+
+    private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
+        // TODO add your handling code here:
+        if(!"".equals(txtCuitProveedor.getText()) && !"".equals(txtEmpresaProveedor.getText()) && !"".equals(txtNombreProveedor.getText()) && !"".equals(txtTelefonoProveedor.getText()) && !"".equals(txtDireccionProveedor.getText())){
+            
+        
+    }
+        
+    }//GEN-LAST:event_btnGuardarProveedorActionPerformed
 
     /**
      * @param args the command line arguments
