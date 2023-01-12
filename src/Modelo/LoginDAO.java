@@ -36,6 +36,23 @@ public class LoginDAO {
         return lg;
     }
     
+    public boolean Registrar(Login reg){
+        String sql="INSERT INTO usuarios(nombre,correo,pass,rol) VALUE (?,?,?,?)";
+        try{
+            con=cn.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, reg.getNombre());
+            ps.setString(2, reg.getCorreo());
+            ps.setString(3, reg.getPass());
+            ps.setString(4, reg.getRol());
+            ps.execute();
+            return true;
+        }catch(SQLException e){
+            System.out.println(e.toString());
+            return false;
+        }
+    }
+    
     
     
     
