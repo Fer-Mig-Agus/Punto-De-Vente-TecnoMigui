@@ -5,18 +5,66 @@
  */
 package Vista;
 
+import Modelo.Login;
+import Modelo.LoginDAO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author usuariopc
  */
 public class SistemaMainTecno extends javax.swing.JFrame {
-
-    /**
-     * Creates new form SistemaMainTecno
-     */
+    
+    
+    Login login=new Login();
+    LoginDAO loginDao=new LoginDAO();
+    
+    DefaultTableModel modelo=new DefaultTableModel();
+   
     public SistemaMainTecno() {
         initComponents();
         this.setLocationRelativeTo(null);
+        txtIdUsuarios.setVisible(false);
+        
+        
+        
+    }
+    
+    public SistemaMainTecno(Login privilegios) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        txtIdUsuarios.setVisible(false);
+        if(privilegios.getRol().equals("Asistente")){
+            btnUsuarios.setEnabled(false);
+            jTabbedPane2.setEnabledAt(1, false);
+            LabelNombreVendedor.setText(privilegios.getNombre());
+        }else{
+            LabelNombreVendedor.setText(privilegios.getNombre());
+        }
+    }
+    //Este metodo es apra limpiar todas la tablas
+    public void LimpiarTabla(){
+        for(int i=0;i<modelo.getRowCount();i++){
+            modelo.removeRow(i);
+            i=i-1;
+        }
+    }
+    
+    public void ListarUsuarios(){
+        List<Login> ListaUsuario= loginDao.ListaUsuario();
+        modelo=(DefaultTableModel) TablaUsuarios.getModel();
+        Object[] ob = new Object[5];
+        for(int i=0;i<ListaUsuario.size();i++){
+            ob[0]=ListaUsuario.get(i).getId();
+            ob[1]=ListaUsuario.get(i).getNombre();
+            ob[2]=ListaUsuario.get(i).getCorreo();
+            ob[3]=ListaUsuario.get(i).getPass();
+            ob[4]=ListaUsuario.get(i).getRol();
+            modelo.addRow(ob);
+        }
+        TablaUsuarios.setModel(modelo);
     }
 
     /**
@@ -88,6 +136,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         TablaUsuarios = new javax.swing.JTable();
         btnEliminarUsuarios = new javax.swing.JButton();
         btnAgregarUsuarios = new javax.swing.JButton();
+        txtIdUsuarios = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtCuitProveedor = new javax.swing.JTextField();
@@ -328,6 +378,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 230, 520));
+
+        jTabbedPane2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane2MouseClicked(evt);
+            }
+        });
 
         jLabel28.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel28.setText("CODIGO");
@@ -695,6 +751,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TablaUsuarios);
         if (TablaUsuarios.getColumnModel().getColumnCount() > 0) {
             TablaUsuarios.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -707,6 +768,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnEliminarUsuarios.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEliminarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarUsuarios.setText("Eliminar");
+        btnEliminarUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarUsuariosActionPerformed(evt);
+            }
+        });
 
         btnAgregarUsuarios.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnAgregarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
@@ -717,20 +783,31 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/ayuda.png"))); // NOI18N
+        jButton1.setText("Refrescar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
+                        .addComponent(txtIdUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnEliminarUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(47, 47, 47)
-                        .addComponent(btnAgregarUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAgregarUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -740,8 +817,10 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtIdUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                     .addComponent(btnEliminarUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAgregarUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -1522,6 +1601,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         // TODO add your handling code here:
+        LimpiarTabla();
+        ListarUsuarios();
         jTabbedPane2.setSelectedIndex(1);
     }//GEN-LAST:event_btnUsuariosActionPerformed
 
@@ -1554,6 +1635,41 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane2.setSelectedIndex(7);
     }//GEN-LAST:event_btnConfigActionPerformed
+
+    private void btnEliminarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuariosActionPerformed
+        // TODO add your handling code here:
+        if(!"".equals(txtIdUsuarios.getText())){
+            int pregunta=JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
+            if(pregunta==0){
+                int id=Integer.parseInt(txtIdUsuarios.getText());
+                loginDao.EliminarUsuario(id);
+                LimpiarTabla();
+                ListarUsuarios();
+                txtIdUsuarios.setText("");
+                
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Seleccione una Fila");
+        }
+    }//GEN-LAST:event_btnEliminarUsuariosActionPerformed
+
+    private void TablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUsuariosMouseClicked
+        // TODO add your handling code here:
+        int fila=TablaUsuarios.rowAtPoint(evt.getPoint());
+        txtIdUsuarios.setText(TablaUsuarios.getValueAt(fila, 0).toString());
+    }//GEN-LAST:event_TablaUsuariosMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        LimpiarTabla();
+        ListarUsuarios();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
+        // TODO add your handling code here:
+        LimpiarTabla();
+        ListarUsuarios();
+    }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1636,6 +1752,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbxOrdenarProductos;
     private javax.swing.JComboBox<String> cbxPorcentajeProductos;
     private javax.swing.JComboBox<String> cbxProveedorProductos;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1722,6 +1839,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdProductoNVenta;
     private javax.swing.JTextField txtIdProductos;
     private javax.swing.JTextField txtIdProveedor;
+    private javax.swing.JTextField txtIdUsuarios;
     private javax.swing.JTextField txtIdiClienteNVenta;
     private javax.swing.JTextField txtNombreClientes;
     private javax.swing.JTextField txtNombreConfig;
@@ -1738,4 +1856,10 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private javax.swing.JTextField txtTipoConfig;
     private javax.swing.JLabel txtTotalPagarNVenta;
     // End of variables declaration//GEN-END:variables
+
+
+
+    
+
+
 }

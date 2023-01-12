@@ -24,7 +24,7 @@ public class LoginMain extends javax.swing.JFrame {
             
             lg=loginDao.logear(correo, pass);
             if(lg.getClass() != null && lg.getPass() != null){
-                SistemaMainTecno sistemaPrincipal=new SistemaMainTecno();
+                SistemaMainTecno sistemaPrincipal=new SistemaMainTecno(lg);
                 sistemaPrincipal.setVisible(true);
                 dispose();
             }else{

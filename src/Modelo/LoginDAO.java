@@ -1,10 +1,12 @@
 
 package Modelo;
 
+import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class LoginDAO {
     
@@ -53,6 +55,47 @@ public class LoginDAO {
         }
     }
     
+    public List ListaUsuario(){
+        List<Login> ListaUsuarios = new ArrayList();
+        String sql="SELECT * FROM usuarios";
+        try{
+            con=cn.getConnection();
+            ps=con.prepareStatement(sql);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                Login lg=new Login();
+                lg.setId(rs.getInt("id"));
+                lg.setNombre(rs.getString("nombre"));
+                lg.setCorreo(rs.getString("correo"));
+                lg.setPass(rs.getString("pass"));
+                lg.setRol(rs.getString("rol"));
+                ListaUsuarios.add(lg);
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+        return ListaUsuarios;
+    }
+    
+    public boolean EliminarUsuario(int id){
+        String sql="DELETE FROM usuarios WHERE id=?";
+        try{
+            ps=con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        }catch(SQLException e){
+            System.out.println(e.toString());
+            return false;
+        }finally{
+            try{
+                con.close();
+            }catch(SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+    }
     
     
     
