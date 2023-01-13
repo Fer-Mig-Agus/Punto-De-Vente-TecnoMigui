@@ -131,6 +131,23 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         }
         TablaCategoria.setModel(modelo);
     }
+    
+    public void ListarProductos(){
+        //FALTAAAA
+        List<Proveedor> ListaProveedor = proveedorDao.ListarProveedor();
+        modelo = (DefaultTableModel) TablaProveedor.getModel();
+        Object[] ob = new Object[6];
+        for (int i = 0; i < ListaProveedor.size(); i++) {
+            ob[0] = ListaProveedor.get(i).getId();
+            ob[1] = ListaProveedor.get(i).getCuit();
+            ob[2] = ListaProveedor.get(i).getEmpresa();
+            ob[3] = ListaProveedor.get(i).getNombre();
+            ob[4] = ListaProveedor.get(i).getTelefono();
+            ob[5] = ListaProveedor.get(i).getDireccion();
+            modelo.addRow(ob);
+        }
+        TablaProveedor.setModel(modelo);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1271,6 +1288,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnGuardarProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardarProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarProductos.setText("GUARDAR");
+        btnGuardarProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProductosActionPerformed(evt);
+            }
+        });
 
         btnActualizarProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnActualizarProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
@@ -2018,6 +2040,26 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Seleccione una Fila");
         }
     }//GEN-LAST:event_btnEliminarCategoriaActionPerformed
+
+    private void btnGuardarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProductosActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtDniClientes.getText()) && !"".equals(txtNombreClientes.getText()) && !"".equals(txtTelefonoClientes.getText()) && !"".equals(txtDireccionClientes.getText())) {
+            cliente.setDni(Long.parseLong(txtDniClientes.getText()));
+
+            cliente.setNombre(txtNombreClientes.getText());
+            cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
+            cliente.setDireccion(txtDireccionClientes.getText());
+            cliente.setFecha(fechaActual);
+            clienteDao.GuardarClientes(cliente);
+            JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
+            LimpiarTabla();
+            ListarClientes();
+            LimpiarCamposCliente();
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Los campos son obligatorios");
+        }
+    }//GEN-LAST:event_btnGuardarProductosActionPerformed
 
     /**
      * @param args the command line arguments
