@@ -7,6 +7,10 @@ package Vista;
 
 import Modelo.Login;
 import Modelo.LoginDAO;
+import Modelo.Proveedor;
+import Modelo.ProveedorDAO;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -16,55 +20,78 @@ import javax.swing.table.DefaultTableModel;
  * @author usuariopc
  */
 public class SistemaMainTecno extends javax.swing.JFrame {
-    
-    
-    Login login=new Login();
-    LoginDAO loginDao=new LoginDAO();
-    
-    DefaultTableModel modelo=new DefaultTableModel();
-   
+
+    //Esto para que el sistema tome la fecha actual
+    Date fecha = new Date();
+    String fechaActual = new SimpleDateFormat("dd/MM/yyyy").format(fecha);
+
+    Login login = new Login();
+    LoginDAO loginDao = new LoginDAO();
+    Proveedor proveedor = new Proveedor();
+    ProveedorDAO proveedorDao = new ProveedorDAO();
+
+    DefaultTableModel modelo = new DefaultTableModel();
+
     public SistemaMainTecno() {
         initComponents();
         this.setLocationRelativeTo(null);
         txtIdUsuarios.setVisible(false);
-        
-        
-        
+        txtIdProveedor.setVisible(false);
+
     }
-    
+
     public SistemaMainTecno(Login privilegios) {
         initComponents();
         this.setLocationRelativeTo(null);
         txtIdUsuarios.setVisible(false);
-        if(privilegios.getRol().equals("Asistente")){
+        txtIdProveedor.setVisible(false);
+        if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
             jTabbedPane2.setEnabledAt(1, false);
             LabelNombreVendedor.setText(privilegios.getNombre());
-        }else{
+        } else {
             LabelNombreVendedor.setText(privilegios.getNombre());
         }
     }
+
     //Este metodo es apra limpiar todas la tablas
-    public void LimpiarTabla(){
-        for(int i=0;i<modelo.getRowCount();i++){
+    public void LimpiarTabla() {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
             modelo.removeRow(i);
-            i=i-1;
+            i = i - 1;
         }
     }
-    
-    public void ListarUsuarios(){
-        List<Login> ListaUsuario= loginDao.ListaUsuario();
-        modelo=(DefaultTableModel) TablaUsuarios.getModel();
+
+    //Esta seccion para va a ser para listar las tablas
+    public void ListarUsuarios() {
+        List<Login> ListaUsuario = loginDao.ListaUsuario();
+        modelo = (DefaultTableModel) TablaUsuarios.getModel();
         Object[] ob = new Object[5];
-        for(int i=0;i<ListaUsuario.size();i++){
-            ob[0]=ListaUsuario.get(i).getId();
-            ob[1]=ListaUsuario.get(i).getNombre();
-            ob[2]=ListaUsuario.get(i).getCorreo();
-            ob[3]=ListaUsuario.get(i).getPass();
-            ob[4]=ListaUsuario.get(i).getRol();
+        for (int i = 0; i < ListaUsuario.size(); i++) {
+            ob[0] = ListaUsuario.get(i).getId();
+            ob[1] = ListaUsuario.get(i).getNombre();
+            ob[2] = ListaUsuario.get(i).getCorreo();
+            ob[3] = ListaUsuario.get(i).getPass();
+            ob[4] = ListaUsuario.get(i).getRol();
             modelo.addRow(ob);
         }
         TablaUsuarios.setModel(modelo);
+    }
+
+    public void ListarProveedores() {
+        List<Proveedor> ListaProveedor = proveedorDao.ListarProveedor();
+        modelo = (DefaultTableModel) TablaProveedor.getModel();
+        Object[] ob = new Object[6];
+        for (int i = 0; i < ListaProveedor.size(); i++) {
+            ob[0] = ListaProveedor.get(i).getId();
+            ob[1] = ListaProveedor.get(i).getCuit();
+            ob[2] = ListaProveedor.get(i).getEmpresa();
+            ob[3] = ListaProveedor.get(i).getNombre();
+            ob[4] = ListaProveedor.get(i).getTelefono();
+            ob[5] = ListaProveedor.get(i).getDireccion();
+            modelo.addRow(ob);
+        }
+        TablaProveedor.setModel(modelo);
     }
 
     /**
@@ -857,6 +884,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaProveedorMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(TablaProveedor);
         if (TablaProveedor.getColumnModel().getColumnCount() > 0) {
             TablaProveedor.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -879,14 +911,29 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnActualizarProveedor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnActualizarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProveedor.setText("ACTUALIZAR");
+        btnActualizarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarProveedorActionPerformed(evt);
+            }
+        });
 
         btnNuevoProveedor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNuevoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoProveedor.setText("NUEVO");
+        btnNuevoProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoProveedorActionPerformed(evt);
+            }
+        });
 
         btnEliminarProveedor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEliminarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarProveedor.setText("ELIMINAR");
+        btnEliminarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProveedorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1598,9 +1645,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnAgregarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuariosActionPerformed
         // TODO add your handling code here:
-        RegistrarMain reg=new RegistrarMain();
+        RegistrarMain reg = new RegistrarMain();
         reg.setVisible(true);
-        
+
     }//GEN-LAST:event_btnAgregarUsuariosActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
@@ -1612,6 +1659,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
         // TODO add your handling code here:
+        LimpiarTabla();
+        ListarProveedores();
         jTabbedPane2.setSelectedIndex(2);
     }//GEN-LAST:event_btnProveedoresActionPerformed
 
@@ -1642,24 +1691,24 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnEliminarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuariosActionPerformed
         // TODO add your handling code here:
-        if(!"".equals(txtIdUsuarios.getText())){
-            int pregunta=JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
-            if(pregunta==0){
-                int id=Integer.parseInt(txtIdUsuarios.getText());
+        if (!"".equals(txtIdUsuarios.getText())) {
+            int pregunta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
+            if (pregunta == 0) {
+                int id = Integer.parseInt(txtIdUsuarios.getText());
                 loginDao.EliminarUsuario(id);
                 LimpiarTabla();
                 ListarUsuarios();
                 txtIdUsuarios.setText("");
-                
+
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Seleccione una Fila");
         }
     }//GEN-LAST:event_btnEliminarUsuariosActionPerformed
 
     private void TablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUsuariosMouseClicked
         // TODO add your handling code here:
-        int fila=TablaUsuarios.rowAtPoint(evt.getPoint());
+        int fila = TablaUsuarios.rowAtPoint(evt.getPoint());
         txtIdUsuarios.setText(TablaUsuarios.getValueAt(fila, 0).toString());
     }//GEN-LAST:event_TablaUsuariosMouseClicked
 
@@ -1671,18 +1720,90 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
         // TODO add your handling code here:
-        LimpiarTabla();
-        ListarUsuarios();
+        JOptionPane.showMessageDialog(null, "Debe de Usar los Botones");
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
         // TODO add your handling code here:
-        if(!"".equals(txtCuitProveedor.getText()) && !"".equals(txtEmpresaProveedor.getText()) && !"".equals(txtNombreProveedor.getText()) && !"".equals(txtTelefonoProveedor.getText()) && !"".equals(txtDireccionProveedor.getText())){
-            
-        
-    }
-        
+        if (!"".equals(txtCuitProveedor.getText()) && !"".equals(txtEmpresaProveedor.getText()) && !"".equals(txtNombreProveedor.getText()) && !"".equals(txtTelefonoProveedor.getText()) && !"".equals(txtDireccionProveedor.getText())) {
+            proveedor.setCuit(Long.parseLong(txtCuitProveedor.getText()));
+            proveedor.setEmpresa(txtEmpresaProveedor.getText());
+            proveedor.setNombre(txtNombreProveedor.getText());
+            proveedor.setTelefono(Long.parseLong(txtTelefonoProveedor.getText()));
+            proveedor.setDireccion(txtDireccionProveedor.getText());
+            proveedor.setFecha(fechaActual);
+            proveedorDao.GuardarProveedores(proveedor);
+            JOptionPane.showMessageDialog(null, "Proveedor guardado correctamente");
+            LimpiarTabla();
+            ListarProveedores();
+            LimpiarCamposProveedor();
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Los campos son obligatorios");
+        }
+
     }//GEN-LAST:event_btnGuardarProveedorActionPerformed
+
+    private void btnNuevoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProveedorActionPerformed
+        // TODO add your handling code here:
+        LimpiarCamposProveedor();
+    }//GEN-LAST:event_btnNuevoProveedorActionPerformed
+
+    private void TablaProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProveedorMouseClicked
+        // TODO add your handling code here:
+        int fila = TablaProveedor.rowAtPoint(evt.getPoint());
+        txtIdProveedor.setText(TablaProveedor.getValueAt(fila, 0).toString());
+        txtCuitProveedor.setText(TablaProveedor.getValueAt(fila, 1).toString());
+        txtEmpresaProveedor.setText(TablaProveedor.getValueAt(fila, 2).toString());
+        txtNombreProveedor.setText(TablaProveedor.getValueAt(fila, 3).toString());
+        txtTelefonoProveedor.setText(TablaProveedor.getValueAt(fila, 4).toString());
+        txtDireccionProveedor.setText(TablaProveedor.getValueAt(fila, 5).toString());
+        txtCuitProveedor.setEnabled(false);
+        txtEmpresaProveedor.setEnabled(false);
+
+    }//GEN-LAST:event_TablaProveedorMouseClicked
+
+    private void btnActualizarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarProveedorActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtIdProveedor.getText())) {
+            if (!"".equals(txtNombreProveedor.getText()) && !"".equals(txtTelefonoProveedor.getText()) && !"".equals(txtDireccionProveedor.getText())) {
+                proveedor.setCuit(Long.parseLong(txtCuitProveedor.getText()));
+                proveedor.setEmpresa(txtEmpresaProveedor.getText());
+                proveedor.setNombre(txtNombreProveedor.getText());
+                proveedor.setTelefono(Long.parseLong(txtTelefonoProveedor.getText()));
+                proveedor.setDireccion(txtDireccionProveedor.getText());
+                proveedor.setId(Integer.parseInt(txtIdProveedor.getText()));
+                proveedorDao.ActualizarProveedor(proveedor);
+                JOptionPane.showMessageDialog(null, "Proveedor Actualizado");
+                LimpiarTabla();
+                ListarProveedores();
+                LimpiarCamposProveedor();
+            }else{
+                JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        }
+    }//GEN-LAST:event_btnActualizarProveedorActionPerformed
+
+    private void btnEliminarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProveedorActionPerformed
+        // TODO add your handling code here:
+        if(!"".equals(txtIdProveedor.getText())){
+            int pregunta=JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
+            if(pregunta == 0){
+                int id=Integer.parseInt(txtIdProveedor.getText());
+                proveedorDao.EliminarProveedor(id);
+                LimpiarTabla();
+                ListarProveedores();
+                LimpiarCamposProveedor();
+            }else{
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                LimpiarCamposProveedor();
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        }
+    }//GEN-LAST:event_btnEliminarProveedorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1870,9 +1991,15 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private javax.swing.JLabel txtTotalPagarNVenta;
     // End of variables declaration//GEN-END:variables
 
-
-
-    
-
+    private void LimpiarCamposProveedor() {
+        txtIdProveedor.setText("");
+        txtCuitProveedor.setText("");
+        txtEmpresaProveedor.setText("");
+        txtNombreProveedor.setText("");
+        txtTelefonoProveedor.setText("");
+        txtDireccionProveedor.setText("");
+        txtCuitProveedor.setEnabled(true);
+        txtEmpresaProveedor.setEnabled(true);
+    }
 
 }
