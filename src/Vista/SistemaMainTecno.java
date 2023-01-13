@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import Modelo.Cliente;
+import Modelo.ClienteDAO;
 import Modelo.Login;
 import Modelo.LoginDAO;
 import Modelo.Proveedor;
@@ -29,6 +31,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     LoginDAO loginDao = new LoginDAO();
     Proveedor proveedor = new Proveedor();
     ProveedorDAO proveedorDao = new ProveedorDAO();
+    Cliente cliente = new Cliente();
+    ClienteDAO clienteDao = new ClienteDAO();
 
     DefaultTableModel modelo = new DefaultTableModel();
 
@@ -92,6 +96,21 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             modelo.addRow(ob);
         }
         TablaProveedor.setModel(modelo);
+    }
+
+    public void ListarClientes() {
+        List<Cliente> ListaCliente = clienteDao.ListarCliente();
+        modelo = (DefaultTableModel) TablaClientes.getModel();
+        Object[] ob = new Object[6];
+        for (int i = 0; i < ListaCliente.size(); i++) {
+            ob[0] = ListaCliente.get(i).getId();
+            ob[1] = ListaCliente.get(i).getDni();
+            ob[2] = ListaCliente.get(i).getNombre();
+            ob[3] = ListaCliente.get(i).getTelefono();
+            ob[4] = ListaCliente.get(i).getDireccion();
+            modelo.addRow(ob);
+        }
+        TablaClientes.setModel(modelo);
     }
 
     /**
@@ -1047,6 +1066,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaClientesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(TablaClientes);
         if (TablaClientes.getColumnModel().getColumnCount() > 0) {
             TablaClientes.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -1059,18 +1083,38 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnGuardarClientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGuardarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarClientes.setText("GUARDAR");
+        btnGuardarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarClientesActionPerformed(evt);
+            }
+        });
 
         btnActualizarClientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnActualizarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarClientes.setText("ACTUALIZAR");
+        btnActualizarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarClientesActionPerformed(evt);
+            }
+        });
 
         btnEliminarClientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEliminarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarClientes.setText("ELIMINAR");
+        btnEliminarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarClientesActionPerformed(evt);
+            }
+        });
 
         btnNuevoClientes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNuevoClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoClientes.setText("NUEVO");
+        btnNuevoClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoClientesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1666,6 +1710,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         // TODO add your handling code here:
+        LimpiarTabla();
+        ListarClientes();
+        LimpiarCamposCliente();
         jTabbedPane2.setSelectedIndex(3);
     }//GEN-LAST:event_btnClientesActionPerformed
 
@@ -1778,7 +1825,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 LimpiarTabla();
                 ListarProveedores();
                 LimpiarCamposProveedor();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
             }
         } else {
@@ -1788,22 +1835,101 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnEliminarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProveedorActionPerformed
         // TODO add your handling code here:
-        if(!"".equals(txtIdProveedor.getText())){
-            int pregunta=JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
-            if(pregunta == 0){
-                int id=Integer.parseInt(txtIdProveedor.getText());
+        if (!"".equals(txtIdProveedor.getText())) {
+            int pregunta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
+            if (pregunta == 0) {
+                int id = Integer.parseInt(txtIdProveedor.getText());
                 proveedorDao.EliminarProveedor(id);
                 LimpiarTabla();
                 ListarProveedores();
                 LimpiarCamposProveedor();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Cancelado");
                 LimpiarCamposProveedor();
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Seleccione una fila");
         }
     }//GEN-LAST:event_btnEliminarProveedorActionPerformed
+
+    private void btnGuardarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClientesActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtDniClientes.getText()) && !"".equals(txtNombreClientes.getText()) && !"".equals(txtTelefonoClientes.getText()) && !"".equals(txtDireccionClientes.getText())) {
+            cliente.setDni(Long.parseLong(txtDniClientes.getText()));
+
+            cliente.setNombre(txtNombreClientes.getText());
+            cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
+            cliente.setDireccion(txtDireccionClientes.getText());
+            cliente.setFecha(fechaActual);
+            clienteDao.GuardarClientes(cliente);
+            JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
+            LimpiarTabla();
+            ListarClientes();
+            LimpiarCamposCliente();
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Los campos son obligatorios");
+        }
+    }//GEN-LAST:event_btnGuardarClientesActionPerformed
+
+    private void TablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClientesMouseClicked
+        // TODO add your handling code here:
+        int fila = TablaClientes.rowAtPoint(evt.getPoint());
+        txtIdClientes.setText(TablaClientes.getValueAt(fila, 0).toString());
+        txtDniClientes.setText(TablaClientes.getValueAt(fila, 1).toString());
+        txtNombreClientes.setText(TablaClientes.getValueAt(fila, 2).toString());
+        txtTelefonoClientes.setText(TablaClientes.getValueAt(fila, 3).toString());
+        txtDireccionClientes.setText(TablaClientes.getValueAt(fila, 4).toString());
+        txtDniClientes.setEnabled(false);
+        txtNombreClientes.setEnabled(false);
+    }//GEN-LAST:event_TablaClientesMouseClicked
+
+    private void btnNuevoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClientesActionPerformed
+        // TODO add your handling code here:
+        LimpiarCamposCliente();
+    }//GEN-LAST:event_btnNuevoClientesActionPerformed
+
+    private void btnActualizarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClientesActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtIdClientes.getText())) {
+            if (!"".equals(txtTelefonoClientes.getText()) && !"".equals(txtDireccionClientes.getText())) {
+//                proveedor.setCuit(Long.parseLong(txtCuitProveedor.getText()));
+//                proveedor.setEmpresa(txtEmpresaProveedor.getText());
+//                proveedor.setNombre(txtNombreProveedor.getText());
+                cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
+                cliente.setDireccion(txtDireccionClientes.getText());
+                cliente.setId(Integer.parseInt(txtIdClientes.getText()));
+                clienteDao.ActualizarCliente(cliente);
+                JOptionPane.showMessageDialog(null, "Cliente Actualizado");
+                LimpiarTabla();
+                ListarClientes();
+                LimpiarCamposCliente();
+            } else {
+                JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        }
+    }//GEN-LAST:event_btnActualizarClientesActionPerformed
+
+    private void btnEliminarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClientesActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtIdClientes.getText())) {
+            int pregunta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
+            if (pregunta == 0) {
+                int id = Integer.parseInt(txtIdClientes.getText());
+                clienteDao.EliminarCliente(id);
+                LimpiarTabla();
+                ListarClientes();
+                LimpiarCamposCliente();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                LimpiarCamposCliente();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        }
+    }//GEN-LAST:event_btnEliminarClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2000,6 +2126,16 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtDireccionProveedor.setText("");
         txtCuitProveedor.setEnabled(true);
         txtEmpresaProveedor.setEnabled(true);
+    }
+
+    private void LimpiarCamposCliente() {
+        txtIdClientes.setText("");
+        txtDniClientes.setText("");
+        txtNombreClientes.setText("");
+        txtTelefonoClientes.setText("");
+        txtDireccionClientes.setText("");
+        txtDniClientes.setEnabled(true);
+        txtNombreClientes.setEnabled(true);
     }
 
 }
