@@ -161,26 +161,12 @@ public class ProductoDAO {
             }
         }catch(SQLException e){
             System.out.println(e.toString());
+            
         }
         return prod;
     }
     
-    public boolean BuscarProductoBooleano(long codigo){
-        
-        String sql="SELECT * FROM productos WHERE codigo=?";
-        try{
-            con=cn.getConnection();
-            ps=con.prepareStatement(sql);
-            ps.setLong(1, codigo);
-            rs=ps.executeQuery();
-            return true;
-        }catch(SQLException e){
-            System.out.println(e.toString());
-            return false;
-        }
-        
-    }
-    
+   
     
     
     

@@ -1356,6 +1356,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/lupa.png"))); // NOI18N
         jButton2.setText("Buscar Producto");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -1882,17 +1887,24 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtCuitProveedor.getText()) && !"".equals(txtEmpresaProveedor.getText()) && !"".equals(txtNombreProveedor.getText()) && !"".equals(txtTelefonoProveedor.getText()) && !"".equals(txtDireccionProveedor.getText())) {
-            proveedor.setCuit(Long.parseLong(txtCuitProveedor.getText()));
-            proveedor.setEmpresa(txtEmpresaProveedor.getText());
-            proveedor.setNombre(txtNombreProveedor.getText());
-            proveedor.setTelefono(Long.parseLong(txtTelefonoProveedor.getText()));
-            proveedor.setDireccion(txtDireccionProveedor.getText());
-            proveedor.setFecha(fechaActual);
-            proveedorDao.GuardarProveedores(proveedor);
-            JOptionPane.showMessageDialog(null, "Proveedor guardado correctamente");
-            LimpiarTabla();
-            ListarProveedores();
-            LimpiarCamposProveedor();
+            long cuitProv = Long.parseLong(txtCuitProveedor.getText());
+            proveedor = proveedorDao.BuscarProveedor(cuitProv);
+            if (proveedor.getNombre() == null) {
+                proveedor.setCuit(Long.parseLong(txtCuitProveedor.getText()));
+                proveedor.setEmpresa(txtEmpresaProveedor.getText());
+                proveedor.setNombre(txtNombreProveedor.getText());
+                proveedor.setTelefono(Long.parseLong(txtTelefonoProveedor.getText()));
+                proveedor.setDireccion(txtDireccionProveedor.getText());
+                proveedor.setFecha(fechaActual);
+                proveedorDao.GuardarProveedores(proveedor);
+                JOptionPane.showMessageDialog(null, "Proveedor guardado correctamente");
+                LimpiarTabla();
+                ListarProveedores();
+                LimpiarCamposProveedor();
+            } else {
+                JOptionPane.showMessageDialog(null, "Proveedor ya existe no se puede agregar");
+                LimpiarCamposProveedor();
+            }
 
         } else {
             JOptionPane.showMessageDialog(null, "Los campos son obligatorios");
@@ -1964,9 +1976,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private void btnGuardarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClientesActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtDniClientes.getText()) && !"".equals(txtNombreClientes.getText()) && !"".equals(txtTelefonoClientes.getText()) && !"".equals(txtDireccionClientes.getText())) {
-            Cliente clienteBuscado = new Cliente();
-            clienteBuscado = clienteDao.BuscarCliente(Long.parseLong(txtDniClientes.getText()));
-            if (clienteBuscado == null) {
+            cliente = clienteDao.BuscarCliente(Long.parseLong(txtDniClientes.getText()));
+            if (cliente.getNombre() == null) {
                 cliente.setDni(Long.parseLong(txtDniClientes.getText()));
                 cliente.setNombre(txtNombreClientes.getText());
                 cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
@@ -2091,9 +2102,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private void btnGuardarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProductosActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtCodigoProductos.getText()) && !"".equals(txtDescripcionProductos.getText()) && !"".equals(txtCantidadProductos.getText()) && !"".equals(txtPrecioCostoProductos.getText())) {
-            
-            boolean productoBuscado = productoDao.BuscarProductoBooleano(Long.parseLong(txtCodigoProductos.getText()));
-            if (!productoBuscado) {
+            long codigo = Long.parseLong(txtCodigoProductos.getText());
+            producto = productoDao.BuscarProducto(codigo);
+            if (producto.getDescripcion() == null) {
                 producto.setCodigo(Long.parseLong(txtCodigoProductos.getText()));
                 producto.setDescripcion(txtDescripcionProductos.getText());
                 producto.setCantidad(Integer.parseInt(txtCantidadProductos.getText()));
@@ -2190,6 +2201,34 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Elija una Fila o Busque el Producto");
         }
     }//GEN-LAST:event_btnEliminarProductosActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtBusquedaProducto.getText())) {
+            long codigo = Long.parseLong(txtBusquedaProducto.getText());
+            producto = productoDao.BuscarProducto(codigo);
+            if (producto.getDescripcion() != null) {
+                JOptionPane.showMessageDialog(null, "Producto Encontrado");
+                txtIdProductos.setText("" + producto.getId());
+                txtCodigoProductos.setText("" + producto.getCodigo());
+                txtDescripcionProductos.setText("" + producto.getDescripcion());
+                txtCantidadProductos.setText("" + producto.getCantidad());
+                cbxProveedorProductos.setSelectedItem("" + producto.getProveedor());
+                cbxCategoriaProductos.setSelectedItem("" + producto.getCategoria());
+                txtPrecioCostoProductos.setText("" + producto.getPrecioCosto());
+                cbxPorcentajeProductos.setSelectedItem("" + producto.getPorcentaje());
+                txtPrecioFinalProductos.setText("" + producto.getPrecioFinal());
+                txtCodigoProductos.setEnabled(true);
+                txtDescripcionProductos.setEnabled(true);
+                cbxCategoriaProductos.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "No existe el producto buscado");
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese un codigo para buscar");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

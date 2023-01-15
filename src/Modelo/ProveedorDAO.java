@@ -112,6 +112,31 @@ public class ProveedorDAO {
     }
     
     
+    public Proveedor BuscarProveedor(long cuit){
+        Proveedor prov=new Proveedor();
+        String sql="SELECT * FROM proveedores WHERE cuit=?";
+        try{
+            con=cn.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setLong(1, cuit);
+            rs=ps.executeQuery();
+            if(rs.next()){
+                prov.setId(rs.getInt("id"));
+                prov.setCuit(rs.getLong("cuit"));
+                prov.setEmpresa(rs.getString("empresa"));
+                prov.setNombre(rs.getString("nombre"));
+                prov.setTelefono(rs.getLong("telefono"));
+                prov.setDireccion(rs.getString("direccion"));
+                
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+            
+        }
+        return prov;
+    }
+    
+    
     
     
     
