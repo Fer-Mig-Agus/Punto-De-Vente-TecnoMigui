@@ -1644,7 +1644,7 @@
                                   <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
                                   <Component id="txtIdProductos" min="-2" pref="17" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Component id="txtPrecioFinalProducto" min="-2" pref="16" max="-2" attributes="0"/>
+                                  <Component id="txtPrecioFinalProductos" min="-2" pref="16" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -1733,7 +1733,7 @@
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="txtIdProductos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtPrecioFinalProducto" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtPrecioFinalProductos" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
@@ -1875,15 +1875,16 @@
                     <Component class="javax.swing.JTable" name="TablaProductos">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="8" rowCount="0">
+                          <Table columnCount="9" rowCount="0">
                             <Column editable="false" title="ID" type="java.lang.Object"/>
+                            <Column editable="false" title="CODIGO" type="java.lang.Object"/>
                             <Column editable="false" title="DESCRIPCION" type="java.lang.Object"/>
                             <Column editable="false" title="CANTIDAD" type="java.lang.Object"/>
                             <Column editable="false" title="PROVEEDOR" type="java.lang.Object"/>
                             <Column editable="false" title="CATEGORIA" type="java.lang.Object"/>
-                            <Column editable="false" title="PRECIO COSTO" type="java.lang.Object"/>
-                            <Column editable="true" title="%" type="java.lang.Object"/>
-                            <Column editable="false" title="PRECIO VENTA" type="java.lang.Object"/>
+                            <Column editable="false" title="COSTO" type="java.lang.Object"/>
+                            <Column editable="false" title="%" type="java.lang.Object"/>
+                            <Column editable="false" title="VENTA" type="java.lang.Object"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1894,6 +1895,11 @@
                               <Renderer/>
                             </Column>
                             <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="10" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>
@@ -1934,6 +1940,9 @@
                           <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="TablaProductosMouseClicked"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1961,6 +1970,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="ACTUALIZAR"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarProductosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnEliminarProductos">
                   <Properties>
@@ -1972,6 +1984,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="ELIMINAR"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarProductosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnExcelProductos">
                   <Properties>
@@ -1994,6 +2009,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="NUEVO"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevoProductosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnPdfProductos">
                   <Properties>
@@ -2021,7 +2039,7 @@
                     <Property name="text" type="java.lang.String" value="Buscar Producto"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtPrecioFinalProducto">
+                <Component class="javax.swing.JTextField" name="txtPrecioFinalProductos">
                 </Component>
               </SubComponents>
             </Container>

@@ -11,6 +11,8 @@ import Modelo.Cliente;
 import Modelo.ClienteDAO;
 import Modelo.Login;
 import Modelo.LoginDAO;
+import Modelo.Producto;
+import Modelo.ProductoDAO;
 import Modelo.Proveedor;
 import Modelo.ProveedorDAO;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -37,25 +40,37 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     ClienteDAO clienteDao = new ClienteDAO();
     Categoria categoria = new Categoria();
     CategoriaDAO categoriaDao = new CategoriaDAO();
+    Producto producto = new Producto();
+    ProductoDAO productoDao = new ProductoDAO();
     DefaultTableModel modelo = new DefaultTableModel();
 
     public SistemaMainTecno() {
         initComponents();
         this.setLocationRelativeTo(null);
+        //Autocompletado
+        AutoCompleteDecorator.decorate(cbxProveedorProductos);
+        AutoCompleteDecorator.decorate(cbxCategoriaProductos);
         txtIdUsuarios.setVisible(false);
         txtIdProveedor.setVisible(false);
         txtNombreCategoria.setVisible(false);
         txtIdClientes.setVisible(false);
+        productoDao.ConsultarProveedor(cbxProveedorProductos);
+        productoDao.ConsultarCategoria(cbxCategoriaProductos);
 
     }
 
     public SistemaMainTecno(Login privilegios) {
         initComponents();
         this.setLocationRelativeTo(null);
+        //Autocompletado
+        AutoCompleteDecorator.decorate(cbxProveedorProductos);
+        AutoCompleteDecorator.decorate(cbxCategoriaProductos);
         txtIdUsuarios.setVisible(false);
         txtIdProveedor.setVisible(false);
         txtNombreCategoria.setVisible(false);
         txtIdClientes.setVisible(false);
+        productoDao.ConsultarProveedor(cbxProveedorProductos);
+        productoDao.ConsultarCategoria(cbxCategoriaProductos);
         if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
             jTabbedPane2.setEnabledAt(1, false);
@@ -131,22 +146,25 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         }
         TablaCategoria.setModel(modelo);
     }
-    
-    public void ListarProductos(){
-        //FALTAAAA
-        List<Proveedor> ListaProveedor = proveedorDao.ListarProveedor();
-        modelo = (DefaultTableModel) TablaProveedor.getModel();
-        Object[] ob = new Object[6];
-        for (int i = 0; i < ListaProveedor.size(); i++) {
-            ob[0] = ListaProveedor.get(i).getId();
-            ob[1] = ListaProveedor.get(i).getCuit();
-            ob[2] = ListaProveedor.get(i).getEmpresa();
-            ob[3] = ListaProveedor.get(i).getNombre();
-            ob[4] = ListaProveedor.get(i).getTelefono();
-            ob[5] = ListaProveedor.get(i).getDireccion();
+
+    public void ListarProductos() {
+
+        List<Producto> ListaProducto = productoDao.ListarProductos();
+        modelo = (DefaultTableModel) TablaProductos.getModel();
+        Object[] ob = new Object[9];
+        for (int i = 0; i < ListaProducto.size(); i++) {
+            ob[0] = ListaProducto.get(i).getId();
+            ob[1] = ListaProducto.get(i).getCodigo();
+            ob[2] = ListaProducto.get(i).getDescripcion();
+            ob[3] = ListaProducto.get(i).getCantidad();
+            ob[4] = ListaProducto.get(i).getProveedor();
+            ob[5] = ListaProducto.get(i).getCategoria();
+            ob[6] = ListaProducto.get(i).getPrecioCosto();
+            ob[7] = ListaProducto.get(i).getPorcentaje();
+            ob[8] = ListaProducto.get(i).getPrecioFinal();
             modelo.addRow(ob);
         }
-        TablaProveedor.setModel(modelo);
+        TablaProductos.setModel(modelo);
     }
 
     /**
@@ -280,7 +298,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtIdProductos = new javax.swing.JTextField();
         txtBusquedaProducto = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        txtPrecioFinalProducto = new javax.swing.JTextField();
+        txtPrecioFinalProductos = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         TablaCategoria = new javax.swing.JTable();
@@ -1262,15 +1280,20 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "DESCRIPCION", "CANTIDAD", "PROVEEDOR", "CATEGORIA", "PRECIO COSTO", "%", "PRECIO VENTA"
+                "ID", "CODIGO", "DESCRIPCION", "CANTIDAD", "PROVEEDOR", "CATEGORIA", "COSTO", "%", "VENTA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        TablaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaProductosMouseClicked(evt);
             }
         });
         jScrollPane4.setViewportView(TablaProductos);
@@ -1278,11 +1301,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             TablaProductos.getColumnModel().getColumn(0).setPreferredWidth(10);
             TablaProductos.getColumnModel().getColumn(1).setPreferredWidth(50);
             TablaProductos.getColumnModel().getColumn(2).setPreferredWidth(10);
-            TablaProductos.getColumnModel().getColumn(3).setPreferredWidth(30);
+            TablaProductos.getColumnModel().getColumn(3).setPreferredWidth(10);
             TablaProductos.getColumnModel().getColumn(4).setPreferredWidth(30);
-            TablaProductos.getColumnModel().getColumn(5).setPreferredWidth(20);
+            TablaProductos.getColumnModel().getColumn(5).setPreferredWidth(30);
             TablaProductos.getColumnModel().getColumn(6).setPreferredWidth(20);
             TablaProductos.getColumnModel().getColumn(7).setPreferredWidth(20);
+            TablaProductos.getColumnModel().getColumn(8).setPreferredWidth(20);
         }
 
         btnGuardarProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1297,10 +1321,20 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnActualizarProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnActualizarProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProductos.setText("ACTUALIZAR");
+        btnActualizarProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarProductosActionPerformed(evt);
+            }
+        });
 
         btnEliminarProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminarProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarProductos.setText("ELIMINAR");
+        btnEliminarProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProductosActionPerformed(evt);
+            }
+        });
 
         btnExcelProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnExcelProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/excel.png"))); // NOI18N
@@ -1309,6 +1343,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnNuevoProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevoProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoProductos.setText("NUEVO");
+        btnNuevoProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoProductosActionPerformed(evt);
+            }
+        });
 
         btnPdfProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnPdfProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
@@ -1374,7 +1413,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                         .addGap(89, 89, 89)
                         .addComponent(txtIdProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
-                        .addComponent(txtPrecioFinalProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPrecioFinalProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1443,7 +1482,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioFinalProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPrecioFinalProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -1777,12 +1816,14 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         // TODO add your handling code here:
         LimpiarTabla();
         ListarClientes();
-        LimpiarCamposCliente();
+
         jTabbedPane2.setSelectedIndex(3);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
         // TODO add your handling code here:
+        LimpiarTabla();
+        ListarProductos();
         jTabbedPane2.setSelectedIndex(4);
     }//GEN-LAST:event_btnProductosActionPerformed
 
@@ -1790,7 +1831,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         // TODO add your handling code here:
         LimpiarTabla();
         ListarCategorias();
-        LimpiarCamposCategoria();
+
         jTabbedPane2.setSelectedIndex(5);
     }//GEN-LAST:event_btnCategoriasActionPerformed
 
@@ -1923,17 +1964,23 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private void btnGuardarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClientesActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtDniClientes.getText()) && !"".equals(txtNombreClientes.getText()) && !"".equals(txtTelefonoClientes.getText()) && !"".equals(txtDireccionClientes.getText())) {
-            cliente.setDni(Long.parseLong(txtDniClientes.getText()));
-
-            cliente.setNombre(txtNombreClientes.getText());
-            cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
-            cliente.setDireccion(txtDireccionClientes.getText());
-            cliente.setFecha(fechaActual);
-            clienteDao.GuardarClientes(cliente);
-            JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
-            LimpiarTabla();
-            ListarClientes();
-            LimpiarCamposCliente();
+            Cliente clienteBuscado = new Cliente();
+            clienteBuscado = clienteDao.BuscarCliente(Long.parseLong(txtDniClientes.getText()));
+            if (clienteBuscado == null) {
+                cliente.setDni(Long.parseLong(txtDniClientes.getText()));
+                cliente.setNombre(txtNombreClientes.getText());
+                cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
+                cliente.setDireccion(txtDireccionClientes.getText());
+                cliente.setFecha(fechaActual);
+                clienteDao.GuardarClientes(cliente);
+                JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
+                LimpiarTabla();
+                ListarClientes();
+                LimpiarCamposCliente();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cliente ya existe, no se puede guardar");
+                LimpiarCamposCliente();
+            }
 
         } else {
             JOptionPane.showMessageDialog(null, "Los campos son obligatorios");
@@ -2032,7 +2079,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 LimpiarTabla();
                 ListarCategorias();
                 LimpiarCamposCategoria();
-            }else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Cancelado");
                 LimpiarCamposCategoria();
             }
@@ -2043,23 +2090,106 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnGuardarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProductosActionPerformed
         // TODO add your handling code here:
-        if (!"".equals(txtDniClientes.getText()) && !"".equals(txtNombreClientes.getText()) && !"".equals(txtTelefonoClientes.getText()) && !"".equals(txtDireccionClientes.getText())) {
-            cliente.setDni(Long.parseLong(txtDniClientes.getText()));
-
-            cliente.setNombre(txtNombreClientes.getText());
-            cliente.setTelefono(Long.parseLong(txtTelefonoClientes.getText()));
-            cliente.setDireccion(txtDireccionClientes.getText());
-            cliente.setFecha(fechaActual);
-            clienteDao.GuardarClientes(cliente);
-            JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
-            LimpiarTabla();
-            ListarClientes();
-            LimpiarCamposCliente();
-
+        if (!"".equals(txtCodigoProductos.getText()) && !"".equals(txtDescripcionProductos.getText()) && !"".equals(txtCantidadProductos.getText()) && !"".equals(txtPrecioCostoProductos.getText())) {
+            
+            boolean productoBuscado = productoDao.BuscarProductoBooleano(Long.parseLong(txtCodigoProductos.getText()));
+            if (!productoBuscado) {
+                producto.setCodigo(Long.parseLong(txtCodigoProductos.getText()));
+                producto.setDescripcion(txtDescripcionProductos.getText());
+                producto.setCantidad(Integer.parseInt(txtCantidadProductos.getText()));
+                producto.setProveedor(cbxProveedorProductos.getSelectedItem().toString());
+                producto.setCategoria(cbxCategoriaProductos.getSelectedItem().toString());
+                double precioCosto = Double.parseDouble(txtPrecioCostoProductos.getText());
+                int porcentaje = Integer.parseInt(cbxPorcentajeProductos.getSelectedItem().toString());
+                producto.setPrecioCosto(precioCosto);
+                producto.setPorcentaje(porcentaje);
+                double precioFinal = precioCosto + ((porcentaje * precioCosto) / 100);
+                producto.setPrecioFinal(precioFinal);
+                producto.setFecha(fechaActual);
+                productoDao.GuardarProductos(producto);
+                JOptionPane.showMessageDialog(null, "Producto guardado correctamente");
+                LimpiarTabla();
+                ListarProductos();
+                LimpiarCamposProductos();
+            } else {
+                JOptionPane.showMessageDialog(null, "El producto Ya existe no se puede agregar");
+                LimpiarCamposProductos();
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Los campos son obligatorios");
         }
     }//GEN-LAST:event_btnGuardarProductosActionPerformed
+
+    private void TablaProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProductosMouseClicked
+        // TODO add your handling code here:
+        int fila = TablaProductos.rowAtPoint(evt.getPoint());
+        txtIdProductos.setText(TablaProductos.getValueAt(fila, 0).toString());
+        txtCodigoProductos.setText(TablaProductos.getValueAt(fila, 1).toString());
+        txtDescripcionProductos.setText(TablaProductos.getValueAt(fila, 2).toString());
+        txtCantidadProductos.setText(TablaProductos.getValueAt(fila, 3).toString());
+        cbxProveedorProductos.setSelectedItem(TablaProductos.getValueAt(fila, 4).toString());
+        cbxCategoriaProductos.setSelectedItem(TablaProductos.getValueAt(fila, 5).toString());
+        txtPrecioCostoProductos.setText(TablaProductos.getValueAt(fila, 6).toString());
+        cbxPorcentajeProductos.setSelectedItem(TablaProductos.getValueAt(fila, 7).toString());
+        txtPrecioFinalProductos.setText(TablaProductos.getValueAt(fila, 8).toString());
+
+        txtCodigoProductos.setEnabled(false);
+        txtDescripcionProductos.setEnabled(false);
+        cbxCategoriaProductos.setEnabled(false);
+    }//GEN-LAST:event_TablaProductosMouseClicked
+
+    private void btnNuevoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProductosActionPerformed
+        // TODO add your handling code here:
+        LimpiarCamposProductos();
+    }//GEN-LAST:event_btnNuevoProductosActionPerformed
+
+    private void btnActualizarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarProductosActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtIdProductos.getText())) {
+            if (!"".equals(txtCantidadProductos.getText()) && !"".equals(txtPrecioCostoProductos.getText())) {
+                producto.setCantidad(Integer.parseInt(txtCantidadProductos.getText()));
+                producto.setProveedor(cbxProveedorProductos.getSelectedItem().toString());
+                Double PrecioCosto = Double.parseDouble(txtPrecioCostoProductos.getText());
+                producto.setPrecioCosto(PrecioCosto);
+                int Porcentaje = Integer.parseInt(cbxPorcentajeProductos.getSelectedItem().toString());
+                producto.setPorcentaje(Porcentaje);
+                double precioFinal = PrecioCosto + ((Porcentaje * PrecioCosto) / 100);
+                producto.setPrecioFinal(precioFinal);
+                producto.setId(Integer.parseInt(txtIdProductos.getText()));
+                productoDao.ActualizarProducto(producto);
+                JOptionPane.showMessageDialog(null, "Produto Actualizado correctamente");
+                LimpiarTabla();
+                ListarProductos();
+                LimpiarCamposProductos();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Elija una Fila o Busque el Producto");
+        }
+
+    }//GEN-LAST:event_btnActualizarProductosActionPerformed
+
+    private void btnEliminarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductosActionPerformed
+        // TODO add your handling code here:
+        if (!"".equals(txtIdProductos.getText())) {
+            int pregunta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
+            if (pregunta == 0) {
+                int id = Integer.parseInt(txtIdProductos.getText());
+                productoDao.EliminarProducto(id);
+                JOptionPane.showMessageDialog(null, "Producto Eliminado con Exito");
+                LimpiarTabla();
+                ListarProductos();
+                LimpiarCamposProductos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Eliminacion Cancelada");
+                LimpiarCamposProductos();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Elija una Fila o Busque el Producto");
+        }
+    }//GEN-LAST:event_btnEliminarProductosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2238,7 +2368,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombreNClienteNVenta;
     private javax.swing.JTextField txtNombreProveedor;
     private javax.swing.JTextField txtPrecioCostoProductos;
-    private javax.swing.JTextField txtPrecioFinalProducto;
+    private javax.swing.JTextField txtPrecioFinalProductos;
     private javax.swing.JTextField txtPrecioNVenta;
     private javax.swing.JTextField txtStockNVenta;
     private javax.swing.JTextField txtTelefonoClientes;
@@ -2274,6 +2404,19 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtIdCategoria.setText("");
         txtNombreCategoria.setText("");
         txtNombreCategoria.setEnabled(true);
+    }
+
+    private void LimpiarCamposProductos() {
+        txtIdProductos.setText("");
+        txtCodigoProductos.setText("");
+        txtDescripcionProductos.setText("");
+        txtCantidadProductos.setText("");
+        txtPrecioCostoProductos.setText("");
+        txtPrecioFinalProductos.setText("");
+        txtBusquedaProducto.setText("");
+        txtCodigoProductos.setEnabled(true);
+        txtDescripcionProductos.setEnabled(true);
+        cbxCategoriaProductos.setEnabled(true);
     }
 
 }

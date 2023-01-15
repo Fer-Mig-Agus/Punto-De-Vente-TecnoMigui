@@ -115,7 +115,7 @@ public class ProductoDAO {
     }
     
     public boolean ActualizarProducto(Producto prod){
-        String sql="UPDATE prodcutos SET cantidad=?,proveedor=?,precioCosto=?,porcentaje=?,precioFinal=? WHERE id=?";
+        String sql="UPDATE productos SET cantidad=?,proveedor=?,precioCosto=?,porcentaje=?,precioFinal=? WHERE id=?";
         try{
             con=cn.getConnection();
             ps=con.prepareStatement(sql);
@@ -124,6 +124,7 @@ public class ProductoDAO {
             ps.setDouble(3, prod.getPrecioCosto());
             ps.setInt(4, prod.getPorcentaje());
             ps.setDouble(5, prod.getPrecioFinal());
+            ps.setInt(6, prod.getId());
             ps.execute();
             return true;
         }catch(SQLException e){
@@ -138,7 +139,7 @@ public class ProductoDAO {
         }
     }
     
-    public Producto BucarProducto(long codigo){
+    public Producto BuscarProducto(long codigo){
         Producto prod=new Producto();
         String sql="SELECT * FROM productos WHERE codigo=?";
         try{
@@ -162,6 +163,22 @@ public class ProductoDAO {
             System.out.println(e.toString());
         }
         return prod;
+    }
+    
+    public boolean BuscarProductoBooleano(long codigo){
+        
+        String sql="SELECT * FROM productos WHERE codigo=?";
+        try{
+            con=cn.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setLong(1, codigo);
+            rs=ps.executeQuery();
+            return true;
+        }catch(SQLException e){
+            System.out.println(e.toString());
+            return false;
+        }
+        
     }
     
     
