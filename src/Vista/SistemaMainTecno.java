@@ -9,6 +9,8 @@ import Modelo.Categoria;
 import Modelo.CategoriaDAO;
 import Modelo.Cliente;
 import Modelo.ClienteDAO;
+import Modelo.Config;
+import Modelo.ConfigDAO;
 import Modelo.Login;
 import Modelo.LoginDAO;
 import Modelo.Producto;
@@ -65,6 +67,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     CategoriaDAO categoriaDao = new CategoriaDAO();
     Producto producto = new Producto();
     ProductoDAO productoDao = new ProductoDAO();
+    Config config=new Config();
+    ConfigDAO configDao=new ConfigDAO();
     DefaultTableModel modelo = new DefaultTableModel();
 
     public SistemaMainTecno() {
@@ -81,6 +85,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         productoDao.ConsultarCategoria(cbxCategoriaProductos);
         txtPrecioFinalProductos.setVisible(false);
         txtIdProductos.setVisible(false);
+        ListarConfig();
 
     }
 
@@ -98,9 +103,19 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         productoDao.ConsultarCategoria(cbxCategoriaProductos);
         txtPrecioFinalProductos.setVisible(false);
         txtIdProductos.setVisible(false);
+        ListarConfig();
         if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
             jTabbedPane2.setEnabledAt(1, false);
+            btnProveedores.setEnabled(false);
+            jTabbedPane2.setEnabledAt(2, false);
+            btnProductos.setEnabled(false);
+            jTabbedPane2.setEnabledAt(4, false);
+            btnCategorias.setEnabled(false);
+            jTabbedPane2.setEnabledAt(5, false);
+            btnConfig.setEnabled(false);
+            jTabbedPane2.setEnabledAt(7, false);
+            
             LabelNombreVendedor.setText(privilegios.getNombre());
         } else {
             LabelNombreVendedor.setText(privilegios.getNombre());
@@ -193,6 +208,16 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         }
         TablaProductos.setModel(modelo);
     }
+    
+    public void ListarConfig(){
+        config=configDao.BuscarDatos();
+        txtIdConfig.setText(""+config.getId());
+        txtCuitConfig.setText(""+config.getCuit());
+        txtNombreConfig.setText(""+config.getNombre());
+        txtTelefonoConfig.setText(""+config.getTelefono());
+        txtDireccionConfig.setText(""+config.getDireccion());
+        txtTipoConfig.setText(""+config.getTipoDeEmpresa());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -210,11 +235,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         LabelNombreVendedor = new javax.swing.JLabel();
         btnUsuarios = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
-        btnCategorias = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
         btnProductos = new javax.swing.JButton();
         btnVentas = new javax.swing.JButton();
         btnProveedores = new javax.swing.JButton();
+        btnCategorias = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
@@ -353,6 +378,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtCuitConfig = new javax.swing.JTextField();
         btnActualizarConfig = new javax.swing.JButton();
         jLabel27 = new javax.swing.JLabel();
+        txtIdConfig = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -389,7 +415,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
         LabelNombreVendedor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LabelNombreVendedor.setForeground(new java.awt.Color(255, 255, 255));
-        LabelNombreVendedor.setText("Nombre del Vendedor");
+        LabelNombreVendedor.setText("NOMBRE");
 
         btnUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
         btnUsuarios.setText("Usuarios");
@@ -404,14 +430,6 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClientesActionPerformed(evt);
-            }
-        });
-
-        btnCategorias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/lupa.png"))); // NOI18N
-        btnCategorias.setText("Categorias");
-        btnCategorias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCategoriasActionPerformed(evt);
             }
         });
 
@@ -447,39 +465,42 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             }
         });
 
+        btnCategorias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/lupa.png"))); // NOI18N
+        btnCategorias.setText("Categorias");
+        btnCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCategoriasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(btnProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNuevaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnNuevaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addComponent(LabelNombreVendedor)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(LabelNombreVendedor)
+                                .addGap(80, 80, 80))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -1697,6 +1718,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnActualizarConfig.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnActualizarConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarConfig.setText("ACTUALIZAR");
+        btnActualizarConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarConfigActionPerformed(evt);
+            }
+        });
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         jLabel27.setText("Todos los Derechos Reservados @CopyRigth - TecnoMigui- ");
@@ -1734,7 +1760,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                                 .addGap(84, 84, 84)
                                 .addComponent(jLabel26))))
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(263, 263, 263)
+                        .addGap(49, 49, 49)
+                        .addComponent(txtIdConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(138, 138, 138)
                         .addComponent(btnActualizarConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(163, 163, 163)
@@ -1772,7 +1800,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                         .addGap(84, 84, 84)
                         .addComponent(jLabel26)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(btnActualizarConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnActualizarConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdConfig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addComponent(jLabel27)
                 .addGap(26, 26, 26))
@@ -1876,6 +1906,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
         // TODO add your handling code here:
+        ListarConfig();
         jTabbedPane2.setSelectedIndex(7);
     }//GEN-LAST:event_btnConfigActionPerformed
 
@@ -2269,6 +2300,22 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         ReportePdf();
     }//GEN-LAST:event_btnPdfProductosActionPerformed
 
+    private void btnActualizarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarConfigActionPerformed
+        // TODO add your handling code here:
+        if(!"".equals(txtCuitConfig.getText()) && !"".equals(txtNombreConfig.getText()) && !"".equals(txtTelefonoConfig.getText()) && !"".equals(txtDireccionConfig.getText()) && !"".equals(txtTipoConfig.getText())){
+            config.setCuit(Long.parseLong(txtCuitConfig.getText()));
+            config.setNombre(txtNombreConfig.getText());
+            config.setTelefono(Long.parseLong(txtTelefonoConfig.getText()));
+            config.setDireccion(txtDireccionConfig.getText());
+            config.setTipoDeEmpresa(txtTipoConfig.getText());
+            configDao.ActualizarDatos(config);
+            JOptionPane.showMessageDialog(null, "CAMBIO DE DATOS DE LA EMPRESA REALIZADO");
+            ListarConfig();
+        }else{
+            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+        }
+    }//GEN-LAST:event_btnActualizarConfigActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2435,6 +2482,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmpresaProveedor;
     private javax.swing.JTextField txtIdCategoria;
     private javax.swing.JTextField txtIdClientes;
+    private javax.swing.JTextField txtIdConfig;
     private javax.swing.JTextField txtIdProductoNVenta;
     private javax.swing.JTextField txtIdProductos;
     private javax.swing.JTextField txtIdProveedor;
