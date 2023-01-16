@@ -15,12 +15,35 @@ import Modelo.Producto;
 import Modelo.ProductoDAO;
 import Modelo.Proveedor;
 import Modelo.ProveedorDAO;
+import Reportes.Excel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Document;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+//Para uso de pdf
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.sun.glass.events.KeyEvent;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
  *
@@ -56,6 +79,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtIdClientes.setVisible(false);
         productoDao.ConsultarProveedor(cbxProveedorProductos);
         productoDao.ConsultarCategoria(cbxCategoriaProductos);
+        txtPrecioFinalProductos.setVisible(false);
+        txtIdProductos.setVisible(false);
 
     }
 
@@ -71,6 +96,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtIdClientes.setVisible(false);
         productoDao.ConsultarProveedor(cbxProveedorProductos);
         productoDao.ConsultarCategoria(cbxCategoriaProductos);
+        txtPrecioFinalProductos.setVisible(false);
+        txtIdProductos.setVisible(false);
         if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
             jTabbedPane2.setEnabledAt(1, false);
@@ -1282,15 +1309,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             new String [] {
                 "ID", "CODIGO", "DESCRIPCION", "CANTIDAD", "PROVEEDOR", "CATEGORIA", "COSTO", "%", "VENTA"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         TablaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TablaProductosMouseClicked(evt);
@@ -1339,6 +1358,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnExcelProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnExcelProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/excel.png"))); // NOI18N
         btnExcelProductos.setText("REPORTE TOTAL");
+        btnExcelProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcelProductosActionPerformed(evt);
+            }
+        });
 
         btnNuevoProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevoProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
@@ -1352,6 +1376,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnPdfProductos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnPdfProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
         btnPdfProductos.setText("REPORTE DE FALTANTES");
+        btnPdfProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPdfProductosActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/lupa.png"))); // NOI18N
@@ -1881,7 +1910,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "Debe de Usar los Botones");
+        
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
@@ -2223,12 +2252,22 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 cbxCategoriaProductos.setEnabled(true);
             } else {
                 JOptionPane.showMessageDialog(null, "No existe el producto buscado");
+                txtBusquedaProducto.setText("");
             }
-
         } else {
             JOptionPane.showMessageDialog(null, "Ingrese un codigo para buscar");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnExcelProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelProductosActionPerformed
+        // TODO add your handling code here:
+        Excel.reporte();
+    }//GEN-LAST:event_btnExcelProductosActionPerformed
+
+    private void btnPdfProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfProductosActionPerformed
+        // TODO add your handling code here:
+        ReportePdf();
+    }//GEN-LAST:event_btnPdfProductosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2456,6 +2495,89 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtCodigoProductos.setEnabled(true);
         txtDescripcionProductos.setEnabled(true);
         cbxCategoriaProductos.setEnabled(true);
+    }
+
+    //Funcion que crea un pdf para el reporte de productos faltantes
+    private void ReportePdf() {
+        try {
+            FileOutputStream archivo;
+            File file = new File("src/Reportes/ReporteProductos.pdf");
+            archivo = new FileOutputStream(file);
+            com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+            PdfWriter.getInstance(doc, archivo);
+            doc.open();
+            Image img = Image.getInstance("src/img/logoPdfTecno.png");
+
+            Paragraph fecha = new Paragraph();
+            Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLUE);
+            fecha.add(Chunk.NEWLINE);
+            Date date = new Date();
+//            fecha.add("Reporte Fecha:\n" + new SimpleDateFormat("dd-mm-yyyy").format(date) + "\n\n");
+            fecha.add("Reporte Fecha:\n" + fechaActual + "\n\n");
+            PdfPTable Encabezado = new PdfPTable(3);
+            Encabezado.setWidthPercentage(100);
+            Encabezado.getDefaultCell().setBorder(0);
+            float[] ColumnaEncabezado = new float[]{30f, 100f, 50f};
+            Encabezado.setWidths(ColumnaEncabezado);
+            Encabezado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            Encabezado.addCell(img);
+
+            Encabezado.addCell("Reporte de Productos Faltantes" + "\n\n");
+            Encabezado.addCell(fecha);
+            doc.add(Encabezado);
+
+            //Productos
+            PdfPTable TableProductos = new PdfPTable(4);
+            TableProductos.setWidthPercentage(100);
+            TableProductos.getDefaultCell().setBorder(0);
+            float[] ColumnaProductos = new float[]{50f, 100f, 50f, 30f};
+            TableProductos.setWidths(ColumnaProductos);
+            TableProductos.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+            PdfPCell producto1 = new PdfPCell(new Phrase("Codigo", negrita));
+            PdfPCell producto2 = new PdfPCell(new Phrase("Descripcion", negrita));
+            PdfPCell producto3 = new PdfPCell(new Phrase("Categoria", negrita));
+            PdfPCell producto4 = new PdfPCell(new Phrase("Cantidad", negrita));
+            producto1.setBorder(0);
+            producto2.setBorder(0);
+            producto3.setBorder(0);
+            producto4.setBorder(0);
+            producto1.setBackgroundColor(BaseColor.GRAY);
+            producto2.setBackgroundColor(BaseColor.GRAY);
+            producto3.setBackgroundColor(BaseColor.GRAY);
+            producto4.setBackgroundColor(BaseColor.GRAY);
+
+            TableProductos.addCell(producto1);
+            TableProductos.addCell(producto2);
+            TableProductos.addCell(producto3);
+            TableProductos.addCell(producto4);
+            //Bucle para traer los productos que tengan 2 o menos unidades disponibles
+
+            for (int i = 0; i < TablaProductos.getRowCount(); i++) {
+
+                String codigo = TablaProductos.getValueAt(i, 1).toString();
+                String descripcion = TablaProductos.getValueAt(i, 2).toString();
+                String categoria = TablaProductos.getValueAt(i, 5).toString();
+                String cantidad = TablaProductos.getValueAt(i, 3).toString();
+
+                int cant = Integer.parseInt(cantidad);
+                if (cant <= 2) {
+                    TableProductos.addCell(codigo);
+                    TableProductos.addCell(descripcion);
+                    TableProductos.addCell(categoria);
+                    TableProductos.addCell(cantidad);
+                }
+            }
+            doc.add(TableProductos);
+            doc.close();
+            archivo.close();
+
+            JOptionPane.showMessageDialog(null, "Reporte de faltantes generado");
+            Desktop.getDesktop().open(file);
+
+        } catch (DocumentException | IOException e) {
+            System.out.println(e.toString());
+        }
     }
 
 }

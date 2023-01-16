@@ -1876,15 +1876,15 @@
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="9" rowCount="0">
-                            <Column editable="false" title="ID" type="java.lang.Object"/>
-                            <Column editable="false" title="CODIGO" type="java.lang.Object"/>
-                            <Column editable="false" title="DESCRIPCION" type="java.lang.Object"/>
-                            <Column editable="false" title="CANTIDAD" type="java.lang.Object"/>
-                            <Column editable="false" title="PROVEEDOR" type="java.lang.Object"/>
-                            <Column editable="false" title="CATEGORIA" type="java.lang.Object"/>
-                            <Column editable="false" title="COSTO" type="java.lang.Object"/>
-                            <Column editable="false" title="%" type="java.lang.Object"/>
-                            <Column editable="false" title="VENTA" type="java.lang.Object"/>
+                            <Column editable="true" title="ID" type="java.lang.Object"/>
+                            <Column editable="true" title="CODIGO" type="java.lang.Object"/>
+                            <Column editable="true" title="DESCRIPCION" type="java.lang.Object"/>
+                            <Column editable="true" title="CANTIDAD" type="java.lang.Object"/>
+                            <Column editable="true" title="PROVEEDOR" type="java.lang.Object"/>
+                            <Column editable="true" title="CATEGORIA" type="java.lang.Object"/>
+                            <Column editable="true" title="COSTO" type="java.lang.Object"/>
+                            <Column editable="true" title="%" type="java.lang.Object"/>
+                            <Column editable="true" title="VENTA" type="java.lang.Object"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1998,6 +1998,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="REPORTE TOTAL"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcelProductosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnNuevoProductos">
                   <Properties>
@@ -2023,6 +2026,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="REPORTE DE FALTANTES"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPdfProductosActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtIdProductos">
                 </Component>
