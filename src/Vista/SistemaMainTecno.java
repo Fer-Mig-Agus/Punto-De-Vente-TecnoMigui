@@ -97,7 +97,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
         txtIdUsuarios.setVisible(false);
         txtIdProveedor.setVisible(false);
-        txtNombreCategoria.setVisible(false);
+        txtIdCategoria.setVisible(false);
         txtIdClientes.setVisible(false);
         AutoCompleteDecorator.decorate(cbxProveedorProductos);
         AutoCompleteDecorator.decorate(cbxCategoriaProductos);
@@ -124,7 +124,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         AutoCompleteDecorator.decorate(cbxCategoriaProductos);
         txtIdUsuarios.setVisible(false);
         txtIdProveedor.setVisible(false);
-        txtNombreCategoria.setVisible(false);
+        txtIdCategoria.setVisible(false);
         txtIdClientes.setVisible(false);
         productoDao.ConsultarProveedor(cbxProveedorProductos);
         productoDao.ConsultarCategoria(cbxCategoriaProductos);
@@ -3407,7 +3407,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             tablapro.addCell(pro4);
 
             for (int i = 0; i < TablaNVenta.getRowCount(); i++) {
-                String codigo=TablaNVenta.getValueAt(1,0).toString();
+                String codigo=TablaNVenta.getValueAt(i,0).toString();
                 String descripcion = TablaNVenta.getValueAt(i, 1).toString();
                 String cantidad = TablaNVenta.getValueAt(i, 2).toString();
                 String precio = TablaNVenta.getValueAt(i, 3).toString();
