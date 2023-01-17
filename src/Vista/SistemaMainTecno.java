@@ -12,6 +12,7 @@ import Modelo.ClienteDAO;
 import Modelo.Config;
 import Modelo.ConfigDAO;
 import Modelo.Detalle;
+import Modelo.Eventos;
 import Modelo.Login;
 import Modelo.LoginDAO;
 import Modelo.Producto;
@@ -78,6 +79,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     Venta venta = new Venta();
     VentaDAO ventaDao = new VentaDAO();
     Detalle detalle = new Detalle();
+    Eventos event=new Eventos();
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel tmp = new DefaultTableModel();
 
@@ -107,6 +109,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtIdVentas.setVisible(false);
         txtIdProductoNVenta.setVisible(false);
         txtIdClienteNVenta.setVisible(false);
+        txtDesNVenta.setEnabled(false);
+        txtPrecioNVenta.setEnabled(false);
+        txtStockNVenta.setEnabled(false);
         ListarConfig();
 
     }
@@ -129,6 +134,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtIdVentas.setVisible(false);
         txtIdProductoNVenta.setVisible(false);
         txtIdClienteNVenta.setVisible(false);
+        txtDesNVenta.setEnabled(false);
+        txtPrecioNVenta.setEnabled(false);
+        txtStockNVenta.setEnabled(false);
         ListarConfig();
         if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
@@ -607,6 +615,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCodigoNVentaKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoNVentaKeyTyped(evt);
+            }
         });
 
         txtDesNVenta.addActionListener(new java.awt.event.ActionListener() {
@@ -623,6 +634,9 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtCantidadNVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCantidadNVentaKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadNVentaKeyTyped(evt);
             }
         });
 
@@ -665,6 +679,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         }
 
         jLabel35.setText("DNI:");
+
+        txtDniClienteNVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniClienteNVentaKeyTyped(evt);
+            }
+        });
 
         jLabel36.setText("NOMBRE:");
 
@@ -773,9 +793,26 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
         jLabel42.setText("DIRECCION:");
 
+        txtTelefonoNClienteNVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoNClienteNVentaKeyTyped(evt);
+            }
+        });
+
         txtNombreNClienteNVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreNClienteNVentaActionPerformed(evt);
+            }
+        });
+        txtNombreNClienteNVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreNClienteNVentaKeyTyped(evt);
+            }
+        });
+
+        txtDniNClienteNVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniNClienteNVentaKeyTyped(evt);
             }
         });
 
@@ -1068,11 +1105,35 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("CUIT:");
 
+        txtCuitProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCuitProveedorKeyTyped(evt);
+            }
+        });
+
+        txtEmpresaProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmpresaProveedorKeyTyped(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("EMPRESA:");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("NOMBRE:");
+
+        txtNombreProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreProveedorKeyTyped(evt);
+            }
+        });
+
+        txtTelefonoProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoProveedorKeyTyped(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("TELEFONO:");
@@ -1234,6 +1295,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("DNI:");
 
+        txtDniClientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniClientesKeyTyped(evt);
+            }
+        });
+
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("NOMBRE:");
 
@@ -1242,6 +1309,18 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("TELEFONO:");
+
+        txtNombreClientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreClientesKeyTyped(evt);
+            }
+        });
+
+        txtTelefonoClientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoClientesKeyTyped(evt);
+            }
+        });
 
         TablaClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1405,6 +1484,18 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setText("CATEGORIA:");
 
+        txtCodigoProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoProductosKeyTyped(evt);
+            }
+        });
+
+        txtCantidadProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadProductosKeyTyped(evt);
+            }
+        });
+
         cbxProveedorProductos.setEditable(true);
         cbxProveedorProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1416,6 +1507,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         cbxCategoriaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cbxCategoriaProductosMouseClicked(evt);
+            }
+        });
+
+        txtPrecioCostoProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioCostoProductosKeyTyped(evt);
             }
         });
 
@@ -1499,6 +1596,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         btnPdfProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPdfProductosActionPerformed(evt);
+            }
+        });
+
+        txtBusquedaProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaProductoKeyTyped(evt);
             }
         });
 
@@ -1687,6 +1790,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             }
         });
 
+        txtNombreCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreCategoriaKeyTyped(evt);
+            }
+        });
+
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel19.setText("NUEVA CATEGORIA:");
 
@@ -1844,6 +1953,24 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         jLabel25.setText("TIPO DE EMPRESA:");
 
         jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/logoTecno.png"))); // NOI18N
+
+        txtNombreConfig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreConfigKeyTyped(evt);
+            }
+        });
+
+        txtTelefonoConfig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoConfigKeyTyped(evt);
+            }
+        });
+
+        txtCuitConfig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCuitConfigKeyTyped(evt);
+            }
+        });
 
         btnActualizarConfig.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnActualizarConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
@@ -2680,6 +2807,110 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         // TODO add your handling code here:
         pdfVentaExitosa();
     }//GEN-LAST:event_btnTicketNVentaActionPerformed
+
+    private void txtCodigoNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoNVentaKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCodigoNVentaKeyTyped
+
+    private void txtCantidadNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadNVentaKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCantidadNVentaKeyTyped
+
+    private void txtDniClienteNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniClienteNVentaKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtDniClienteNVentaKeyTyped
+
+    private void txtDniNClienteNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniNClienteNVentaKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtDniNClienteNVentaKeyTyped
+
+    private void txtNombreNClienteNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreNClienteNVentaKeyTyped
+        // TODO add your handling code here:
+        event.textKeyPress(evt);
+    }//GEN-LAST:event_txtNombreNClienteNVentaKeyTyped
+
+    private void txtTelefonoNClienteNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoNClienteNVentaKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtTelefonoNClienteNVentaKeyTyped
+
+    private void txtCuitProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuitProveedorKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCuitProveedorKeyTyped
+
+    private void txtEmpresaProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmpresaProveedorKeyTyped
+        // TODO add your handling code here:
+        event.textKeyPress(evt);
+    }//GEN-LAST:event_txtEmpresaProveedorKeyTyped
+
+    private void txtNombreProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProveedorKeyTyped
+        // TODO add your handling code here:
+        event.textKeyPress(evt);
+    }//GEN-LAST:event_txtNombreProveedorKeyTyped
+
+    private void txtTelefonoProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoProveedorKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtTelefonoProveedorKeyTyped
+
+    private void txtDniClientesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniClientesKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtDniClientesKeyTyped
+
+    private void txtNombreClientesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClientesKeyTyped
+        // TODO add your handling code here:
+        event.textKeyPress(evt);
+    }//GEN-LAST:event_txtNombreClientesKeyTyped
+
+    private void txtTelefonoClientesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoClientesKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtTelefonoClientesKeyTyped
+
+    private void txtCodigoProductosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductosKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCodigoProductosKeyTyped
+
+    private void txtCantidadProductosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProductosKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCantidadProductosKeyTyped
+
+    private void txtPrecioCostoProductosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioCostoProductosKeyTyped
+        // TODO add your handling code here:
+        event.numberDecimalKeyPress(evt, txtPrecioCostoProductos);
+    }//GEN-LAST:event_txtPrecioCostoProductosKeyTyped
+
+    private void txtBusquedaProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaProductoKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtBusquedaProductoKeyTyped
+
+    private void txtNombreCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreCategoriaKeyTyped
+        // TODO add your handling code here:
+        event.textKeyPress(evt);
+    }//GEN-LAST:event_txtNombreCategoriaKeyTyped
+
+    private void txtCuitConfigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuitConfigKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCuitConfigKeyTyped
+
+    private void txtNombreConfigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreConfigKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreConfigKeyTyped
+
+    private void txtTelefonoConfigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoConfigKeyTyped
+        // TODO add your handling code here:
+        event.numberKeyPress(evt);
+    }//GEN-LAST:event_txtTelefonoConfigKeyTyped
 
     /**
      * @param args the command line arguments
