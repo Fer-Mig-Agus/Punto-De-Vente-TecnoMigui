@@ -12,10 +12,13 @@ public class Conexion {
     
     public Connection getConnection(){
         try{
+            
             String access="jdbc:ucanaccess://D:/BDTecnoMigui/BDTecnoMigui.accdb";
+            con = DriverManager.getConnection(access);
+            
 //            String myBD="jdbc:mysql://localhost:3306/sistemaventatecno?serverTimezone=UTC";
 //            con=DriverManager.getConnection(myBD,"root","");
-            con = DriverManager.getConnection(access);
+            
             return con;
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, "No se encontró la Base de Datos");

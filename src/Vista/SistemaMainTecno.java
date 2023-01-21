@@ -138,19 +138,20 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtDesNVenta.setEnabled(false);
         txtPrecioNVenta.setEnabled(false);
         txtStockNVenta.setEnabled(false);
+        
+        //Aqui cancelo todas las solapas de las ventanas, obligando ha que usen los botones
+        for(int i=0;i<8;i++){
+            jTabbedPane2.setEnabledAt(i, false);
+        }
+        
         ListarConfig();
         if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
-            jTabbedPane2.setEnabledAt(1, false);
             btnProveedores.setEnabled(false);
-            jTabbedPane2.setEnabledAt(2, false);
             btnProductos.setEnabled(false);
-            jTabbedPane2.setEnabledAt(4, false);
             btnCategorias.setEnabled(false);
-            jTabbedPane2.setEnabledAt(5, false);
+            btnClientes.setEnabled(false);
             btnConfig.setEnabled(false);
-            jTabbedPane2.setEnabledAt(7, false);
-
             LabelNombreVendedor.setText(privilegios.getNombre());
         } else {
             LabelNombreVendedor.setText(privilegios.getNombre());
@@ -2732,7 +2733,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 cliente.setDireccion(txtDirecNClienteNVenta.getText());
                 cliente.setFecha(fechaActual);
                 clienteDao.GuardarClientes(cliente);
-                JOptionPane.showMessageDialog(null, "Cliente guardado correctamente");
+                JOptionPane.showMessageDialog(null, "Cliente guardado correctamente, Ahora puedes cerrar la venta");
                 LimpiarTabla();
                 ListarClientes();
 
@@ -3393,7 +3394,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 PdfPTable tablacli = new PdfPTable(4);
                 tablacli.setWidthPercentage(100);
                 tablacli.getDefaultCell().setBorder(0);
-                float[] ColumnaCli = new float[]{20f, 50f, 100f, 40f};
+                float[] ColumnaCli = new float[]{35f, 50f, 35f, 70f};
                 tablacli.setWidths(ColumnaCli);
                 tablacli.setHorizontalAlignment(Element.ALIGN_LEFT);
 
