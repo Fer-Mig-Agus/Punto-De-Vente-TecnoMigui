@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Esta es una clase para poder crear los objetos de clientes, con todos sus campos
 public class Cliente {
     
     private int id;

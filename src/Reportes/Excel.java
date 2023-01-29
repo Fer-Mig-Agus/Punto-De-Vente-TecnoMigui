@@ -1,5 +1,6 @@
 package Reportes;
 
+//Importo los paquetes que necesito
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;

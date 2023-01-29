@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Importo los paquetes que necesito
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VentaDAO {
-    
+    //Creo las variables globales para la conexion
     Connection con;
     Conexion cn=new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     int r;
     
-    
+    //Este metodo retorna el ID de la venta, selecciona el maximo ID
     public int IdVenta(){
         int id=0;
         String sql="SELECT MAX(id) FROM ventas";
@@ -34,6 +34,7 @@ public class VentaDAO {
         return id;
     }
     
+    //Este metodo guarda una venta
     public int RegistrarVenta(Venta venta){
         String sql="INSERT INTO ventas (cliente,vendedor,total,fecha) VALUES (?,?,?,?)";
         try{
@@ -57,6 +58,7 @@ public class VentaDAO {
         return r;
     }
     
+    //Este metodo guarda los detalles de la venta
     public int RegistrarDetalle(Detalle Dv){
         String slq="INSERT INTO detalle (codProducto,cantidad,precio,idVenta) VALUES (?,?,?,?)";
         try{
@@ -80,6 +82,8 @@ public class VentaDAO {
     }
     
     
+    //Este metodo actualiza el stock de todos los productos vendidos
+    //toma como parametro, la cantidad vendida y el codigo del producto
     public boolean ActualizarStock(int cant,long cod){
         String sql="UPDATE productos SET cantidad = ? WHERE codigo =?";
         try{
@@ -95,6 +99,7 @@ public class VentaDAO {
         }
     }
     
+    //Este metodo lista las ventas, retorna la lista
     public List ListarVentas(){
         List<Venta> ListaVenta=new ArrayList();
         String slq="SELECT * FROM ventas";

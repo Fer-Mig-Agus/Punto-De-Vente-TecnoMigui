@@ -1,6 +1,7 @@
 
 package Modelo;
 
+//Importo todo lo necesario
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,12 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaDAO {
+    //Creo las variables globales, que me permitiran la conexion con la BD
     Connection con;
     Conexion cn= new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     
     
+    //Guarda las nuevas categorias, retorna true si se ha guardado con exito
     public boolean GuardarCategoria(Categoria cat){
         String sql="INSERT INTO categorias(nombre) VALUES(?)";
         try{
@@ -26,6 +29,8 @@ public class CategoriaDAO {
         }catch(SQLException e){
             System.out.println(e.toString());
             return false;
+            //El finally es para que cuando termine de hacer la consulta, 
+            //la conexion se cierre, pasa los mismmo en los demas metodos
         }finally{
             try{
                 con.close();
@@ -35,6 +40,7 @@ public class CategoriaDAO {
         }
     }
     
+    //Lista la categoria
     public List ListarCategorias(){
         List<Categoria> ListaCategorias=new ArrayList();
         String sql="SELECT * FROM categorias";
@@ -54,6 +60,7 @@ public class CategoriaDAO {
         return ListaCategorias;
     }
     
+    //Elimina las categorias
     public boolean EliminarCategoria(int id){
         String sql="DELETE FROM categorias WHERE id=?";
         try{

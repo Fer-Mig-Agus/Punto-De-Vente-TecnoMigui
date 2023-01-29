@@ -1,6 +1,7 @@
 
 package Modelo;
 
+//Esta es una clase para poder crear los objetos de ventas, con todos sus campos
 
 public class Venta {
     

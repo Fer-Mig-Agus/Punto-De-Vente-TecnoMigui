@@ -5,6 +5,7 @@
  */
 package Vista;
 
+//Importo los paquetes que necesito
 import Modelo.Categoria;
 import Modelo.CategoriaDAO;
 import Modelo.Cliente;
@@ -31,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-//Para uso de pdf
+//Paquetes para crear los PDF
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 
@@ -60,6 +61,7 @@ import java.util.logging.Logger;
  */
 public class SistemaMainTecno extends javax.swing.JFrame {
 
+    //Creo las variables globales
     //Esto para que el sistema tome la fecha actual
     Date fecha = new Date();
     String fechaActual = new SimpleDateFormat("dd/MM/yyyy").format(fecha);
@@ -79,31 +81,31 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     Venta venta = new Venta();
     VentaDAO ventaDao = new VentaDAO();
     Detalle detalle = new Detalle();
-    Eventos event=new Eventos();
+    Eventos event = new Eventos();
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel tmp = new DefaultTableModel();
 
     int item;
     double TotalPagar = 0.0;
-    String NombreCliente = "";
-    String DniCliente = "";
-    String TelefonoCliente = "";
-    String DireccionCliente = "";
-    int banderaVenta=0;
+    String NombreClienteNuevaVenta = "";
+    String DniClienteNuevaVenta = "";
+    String TelefonoClienteNuevaVenta = "";
+    String DireccionClienteNuevaVenta = "";
+    int habilitarTicket = 0;
 
     public SistemaMainTecno() {
         initComponents();
         this.setLocationRelativeTo(null);
-        //Autocompletado
 
+        //Autocompletado
+        AutoCompleteDecorator.decorate(cbxProveedorProductos);
+        AutoCompleteDecorator.decorate(cbxCategoriaProductos);
+
+        //Aqui desabilito esos campos que no se tienen que ver
         txtIdUsuarios.setVisible(false);
         txtIdProveedor.setVisible(false);
         txtIdCategoria.setVisible(false);
         txtIdClientes.setVisible(false);
-        AutoCompleteDecorator.decorate(cbxProveedorProductos);
-        AutoCompleteDecorator.decorate(cbxCategoriaProductos);
-//        productoDao.ConsultarProveedor(cbxProveedorProductos);
-//        productoDao.ConsultarCategoria(cbxCategoriaProductos);
         txtPrecioFinalProductos.setVisible(false);
         txtIdProductos.setVisible(false);
         txtIdConfig.setVisible(false);
@@ -113,22 +115,23 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtDesNVenta.setEnabled(false);
         txtPrecioNVenta.setEnabled(false);
         txtStockNVenta.setEnabled(false);
+        //Lista los datos de la empresa
         ListarConfig();
 
     }
 
     public SistemaMainTecno(Login privilegios) {
+
         initComponents();
         this.setLocationRelativeTo(null);
         //Autocompletado
         AutoCompleteDecorator.decorate(cbxProveedorProductos);
         AutoCompleteDecorator.decorate(cbxCategoriaProductos);
+        //Aqui desabilito esos campos que no se tienen que ver
         txtIdUsuarios.setVisible(false);
         txtIdProveedor.setVisible(false);
         txtIdCategoria.setVisible(false);
         txtIdClientes.setVisible(false);
-        productoDao.ConsultarProveedor(cbxProveedorProductos);
-        productoDao.ConsultarCategoria(cbxCategoriaProductos);
         txtPrecioFinalProductos.setVisible(false);
         txtIdProductos.setVisible(false);
         txtIdConfig.setVisible(false);
@@ -138,13 +141,16 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         txtDesNVenta.setEnabled(false);
         txtPrecioNVenta.setEnabled(false);
         txtStockNVenta.setEnabled(false);
-        
-        //Aqui cancelo todas las solapas de las ventanas, obligando ha que usen los botones
-        for(int i=0;i<8;i++){
+
+        //Aqui cancelo todas las solapas de las ventanas,
+        //obligando ha que usen los botones
+        for (int i = 0; i < 8; i++) {
             jTabbedPane2.setEnabledAt(i, false);
         }
-        
+        //Listo los datos de la empresa
         ListarConfig();
+        //Esta condicion es para saber si es admin, de no
+        //serlo, se desabilitan los botones correspondientes
         if (privilegios.getRol().equals("Asistente")) {
             btnUsuarios.setEnabled(false);
             btnProveedores.setEnabled(false);
@@ -152,6 +158,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             btnCategorias.setEnabled(false);
             btnClientes.setEnabled(false);
             btnConfig.setEnabled(false);
+            //Esto es para poner el nombre del vendedor
             LabelNombreVendedor.setText(privilegios.getNombre());
         } else {
             LabelNombreVendedor.setText(privilegios.getNombre());
@@ -164,6 +171,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             modelo.removeRow(i);
             i = i - 1;
         }
+
     }
 
     //Esta seccion para va a ser para listar las tablas
@@ -180,6 +188,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             modelo.addRow(ob);
         }
         TablaUsuarios.setModel(modelo);
+
     }
 
     public void ListarProveedores() {
@@ -2120,19 +2129,20 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreNClienteNVentaActionPerformed
 
     private void btnNuevaVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaVentaActionPerformed
-        // TODO add your handling code here:
+        //Selecciona la solapa numero 1, nueva venta
         jTabbedPane2.setSelectedIndex(0);
     }//GEN-LAST:event_btnNuevaVentaActionPerformed
 
     private void btnAgregarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuariosActionPerformed
-        // TODO add your handling code here:
+
+        //Creo un objeto de RegistrarMain, para agregar nuevos usuarios
         RegistrarMain reg = new RegistrarMain();
         reg.setVisible(true);
 
     }//GEN-LAST:event_btnAgregarUsuariosActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
-        // TODO add your handling code here:
+
         LimpiarTabla();
         ListarUsuarios();
         jTabbedPane2.setSelectedIndex(1);
@@ -2154,10 +2164,11 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-        // TODO add your handling code here:
-        
+
+        //Aqui borro todo el contenido del comboBox
         cbxProveedorProductos.removeAllItems();
         cbxCategoriaProductos.removeAllItems();
+        //Aqui traigo de la BD los datos para completar cada ComboBox
         productoDao.ConsultarProveedor(cbxProveedorProductos);
         productoDao.ConsultarCategoria(cbxCategoriaProductos);
         LimpiarTabla();
@@ -2189,7 +2200,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfigActionPerformed
 
     private void btnEliminarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuariosActionPerformed
-        // TODO add your handling code here:
+        //Aqui eliminar un usuario al seleccionarlo de la tabla
+
         if (!"".equals(txtIdUsuarios.getText())) {
             int pregunta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar?");
             if (pregunta == 0) {
@@ -2206,7 +2218,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarUsuariosActionPerformed
 
     private void TablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUsuariosMouseClicked
-        // TODO add your handling code here:
+
         int fila = TablaUsuarios.rowAtPoint(evt.getPoint());
         txtIdUsuarios.setText(TablaUsuarios.getValueAt(fila, 0).toString());
     }//GEN-LAST:event_TablaUsuariosMouseClicked
@@ -2219,13 +2231,13 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
         // TODO add your handling code here:
-        
-        
+
 
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
-        // TODO add your handling code here:
+        //Aqui guarda un proveedor si todos los campos estan bien
+        //Ademas de consultar a la base de datos para que no haya duplicados
         if (!"".equals(txtCuitProveedor.getText()) && !"".equals(txtEmpresaProveedor.getText()) && !"".equals(txtNombreProveedor.getText()) && !"".equals(txtTelefonoProveedor.getText()) && !"".equals(txtDireccionProveedor.getText())) {
             long cuitProv = Long.parseLong(txtCuitProveedor.getText());
             proveedor = proveedorDao.BuscarProveedor(cuitProv);
@@ -2258,7 +2270,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoProveedorActionPerformed
 
     private void TablaProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProveedorMouseClicked
-        // TODO add your handling code here:
+        //Toma todos los campos de la fila de la lista, para ponerlos en
+        //los txtField que corresponde
         int fila = TablaProveedor.rowAtPoint(evt.getPoint());
         txtIdProveedor.setText(TablaProveedor.getValueAt(fila, 0).toString());
         txtCuitProveedor.setText(TablaProveedor.getValueAt(fila, 1).toString());
@@ -2577,14 +2590,20 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnPdfProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfProductosActionPerformed
         // TODO add your handling code here:
-        String Cantidad=(JOptionPane.showInputDialog("Introduce la Cantidad: "));
-        
-        while("".equals(Cantidad) || !isNumeric(Cantidad)){
-            Cantidad=(JOptionPane.showInputDialog("Introduce la Cantidad: "));
+        String Cantidad = (JOptionPane.showInputDialog("Introduce la Cantidad: "));
+        if (Cantidad != null) {
+            while ("".equals(Cantidad) || !isNumeric(Cantidad) || Integer.parseInt(Cantidad) <= 0) {
+                Cantidad = (JOptionPane.showInputDialog("Introduce la Cantidad: "));
+                if (Cantidad == null) {
+                    JOptionPane.showMessageDialog(null, "Reporte Cancelado");
+                    dispose();
+                }
+            }
         }
-        
-        int CantidadParaReporte=Integer.parseInt(Cantidad);
-        ReportePdf(CantidadParaReporte);
+        if (Cantidad != null) {
+            int CantidadParaReporte = Integer.parseInt(Cantidad);
+            ReportePdf(CantidadParaReporte);
+        }
     }//GEN-LAST:event_btnPdfProductosActionPerformed
 
     private void btnActualizarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarConfigActionPerformed
@@ -2752,16 +2771,16 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         if (TablaNVenta.getRowCount() > 0) {
             if (!"".equals(txtDniNClienteNVenta.getText()) || !"".equals(txtDniClienteNVenta.getText())) {
                 if (!"".equals(txtNombreClienteNVenta.getText())) {
-                    NombreCliente = txtNombreClienteNVenta.getText();
-                    DniCliente = txtDniClienteNVenta.getText();;
-                    TelefonoCliente = txtTelClienteNVenta.getText();;
-                    DireccionCliente = txtDirClienteNVenta.getText();;
+                    NombreClienteNuevaVenta = txtNombreClienteNVenta.getText();
+                    DniClienteNuevaVenta = txtDniClienteNVenta.getText();;
+                    TelefonoClienteNuevaVenta = txtTelClienteNVenta.getText();;
+                    DireccionClienteNuevaVenta = txtDirClienteNVenta.getText();;
 
                 } else {
-                    NombreCliente = txtNombreNClienteNVenta.getText();
-                    DniCliente = txtDniNClienteNVenta.getText();;
-                    TelefonoCliente = txtTelefonoNClienteNVenta.getText();;
-                    DireccionCliente = txtDirecNClienteNVenta.getText();;
+                    NombreClienteNuevaVenta = txtNombreNClienteNVenta.getText();
+                    DniClienteNuevaVenta = txtDniNClienteNVenta.getText();;
+                    TelefonoClienteNuevaVenta = txtTelefonoNClienteNVenta.getText();;
+                    DireccionClienteNuevaVenta = txtDirecNClienteNVenta.getText();;
 
                 }
                 RegistrarVenta();
@@ -2769,28 +2788,27 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 ActualizarStock();
 
                 JOptionPane.showMessageDialog(null, "Venta Exitosa");
-                banderaVenta=1;
+                habilitarTicket = 1;
                 LimpiarCamposVenta();
                 LimpiarCamposNuevoClienteNVenta();
                 LimpiarCamposClienteNVenta();
-                
 
             } else {
                 int pregunta = JOptionPane.showConfirmDialog(null, "Desea vender con el campo cliente vacio?");
                 if (pregunta == 0) {
-                    NombreCliente = "";
-                    DniCliente = "";
-                    TelefonoCliente = "";
-                    DireccionCliente = "";
+                    NombreClienteNuevaVenta = "";
+                    DniClienteNuevaVenta = "";
+                    TelefonoClienteNuevaVenta = "";
+                    DireccionClienteNuevaVenta = "";
                     RegistrarVenta();
                     RegistrarDetalle();
                     ActualizarStock();
-                    banderaVenta=1;
+                    habilitarTicket = 1;
                     JOptionPane.showMessageDialog(null, "Venta Exitosa");
                     LimpiarCamposVenta();
                     LimpiarCamposNuevoClienteNVenta();
                     LimpiarCamposClienteNVenta();
-                    
+
                 }
             }
 
@@ -2832,13 +2850,13 @@ public class SistemaMainTecno extends javax.swing.JFrame {
 
     private void btnTicketNVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketNVentaActionPerformed
         // TODO add your handling code here:
-        if(banderaVenta != 0){
+        if (habilitarTicket != 0) {
             pdfVentaExitosa();
-            banderaVenta=0;
-        }else{
+            habilitarTicket = 0;
+        } else {
             JOptionPane.showMessageDialog(null, "Debe de cerrar la venta");
         }
-        
+
     }//GEN-LAST:event_btnTicketNVentaActionPerformed
 
     private void txtCodigoNVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoNVentaKeyTyped
@@ -2948,7 +2966,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private void btnNuevoCategoria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoCategoria1ActionPerformed
         // TODO add your handling code here:
         LimpiarCamposCategoria();
-        
+
     }//GEN-LAST:event_btnNuevoCategoria1ActionPerformed
 
     /**
@@ -3313,7 +3331,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
     private void RegistrarVenta() {
         String vendedor = LabelNombreVendedor.getText();
         double monto = TotalPagar;
-        venta.setCliente(NombreCliente);
+        venta.setCliente(NombreClienteNuevaVenta);
         venta.setVendedor(vendedor);
         venta.setTotal(monto);
         venta.setFecha(fechaActual);
@@ -3362,7 +3380,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             Paragraph fecha = new Paragraph();
             Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLUE);
             fecha.add(Chunk.NEWLINE);
-            
+
             fecha.add("Factura: " + id + "\n" + "Fecha: " + fechaActual + "\n\n");
 
             PdfPTable Encabezado = new PdfPTable(4);
@@ -3385,7 +3403,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             Encabezado.addCell(fecha);
             doc.add(Encabezado);
 
-            if (!"".equals(NombreCliente)) {
+            if (!"".equals(NombreClienteNuevaVenta)) {
                 Paragraph cli = new Paragraph();
                 cli.add(Chunk.NEWLINE);
                 cli.add("Datos de los clientes: " + "\n\n");
@@ -3411,10 +3429,10 @@ public class SistemaMainTecno extends javax.swing.JFrame {
                 tablacli.addCell(cl2);
                 tablacli.addCell(cl3);
                 tablacli.addCell(cl4);
-                tablacli.addCell(DniCliente);
-                tablacli.addCell(NombreCliente);
-                tablacli.addCell(TelefonoCliente);
-                tablacli.addCell(DireccionCliente);
+                tablacli.addCell(DniClienteNuevaVenta);
+                tablacli.addCell(NombreClienteNuevaVenta);
+                tablacli.addCell(TelefonoClienteNuevaVenta);
+                tablacli.addCell(DireccionClienteNuevaVenta);
                 doc.add(tablacli);
 
             }
@@ -3422,7 +3440,7 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             PdfPTable tablapro = new PdfPTable(5);
             tablapro.setWidthPercentage(100);
             tablapro.getDefaultCell().setBorder(0);
-            float[] ColumnaPro = new float[]{35f,70f, 30f, 30f, 30f};
+            float[] ColumnaPro = new float[]{35f, 70f, 30f, 30f, 30f};
             tablapro.setWidths(ColumnaPro);
             tablapro.setHorizontalAlignment(Element.ALIGN_LEFT);
             PdfPCell pro0 = new PdfPCell(new Phrase("Codigo", negrita));
@@ -3447,12 +3465,12 @@ public class SistemaMainTecno extends javax.swing.JFrame {
             tablapro.addCell(pro4);
 
             for (int i = 0; i < TablaNVenta.getRowCount(); i++) {
-                String codigo=TablaNVenta.getValueAt(i,0).toString();
+                String codigo = TablaNVenta.getValueAt(i, 0).toString();
                 String descripcion = TablaNVenta.getValueAt(i, 1).toString();
                 String cantidad = TablaNVenta.getValueAt(i, 2).toString();
                 String precio = TablaNVenta.getValueAt(i, 3).toString();
                 String total = TablaNVenta.getValueAt(i, 4).toString();
-                
+
                 tablapro.addCell(codigo);
                 tablapro.addCell(descripcion);
                 tablapro.addCell(cantidad);
@@ -3495,9 +3513,8 @@ public class SistemaMainTecno extends javax.swing.JFrame {
         }
     }
 
-    
     //Funcion para saber si un String es un Numero Válido
-    public static boolean isNumeric(String cadena){
+    public static boolean isNumeric(String cadena) {
         if (cadena == null || cadena.equals("")) {
             return false;
         }

@@ -1,6 +1,7 @@
 
 package Modelo;
 
+//Importo los paquetes que necesito
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,12 +11,13 @@ import java.util.List;
 
 
 public class ProveedorDAO {
-    
+    //Creo las variables globales para la conexion
     Connection con;
     Conexion cn=new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     
+    //Este metodo guarda los proveedores, retorna true si lo hizo con exito
     public boolean GuardarProveedores(Proveedor pro){
         String sql="INSERT INTO proveedores(cuit,empresa,nombre,telefono,direccion,fecha) VALUES (?,?,?,?,?,?)";
         try{
@@ -41,6 +43,7 @@ public class ProveedorDAO {
         }
     }
     
+    //Este metodo realiza una lista de proveedores, retorna la lista
     public List ListarProveedor(){
         List<Proveedor> ListaProveedores=new ArrayList();
         String sql="SELECT * FROM proveedores";
@@ -66,6 +69,7 @@ public class ProveedorDAO {
         return ListaProveedores;
     }
     
+    //Este metodo actualiza el proveedor, usa un objeto que se toma por parametro
     public boolean ActualizarProveedor(Proveedor pro){
         String sql="UPDATE proveedores SET cuit=?,empresa=?,nombre=?,telefono=?,direccion=? WHERE id=?";
         try{
@@ -91,6 +95,7 @@ public class ProveedorDAO {
         }
     }
     
+    //Este metodo elimina un proveedor, lo hace usando el ID
     public boolean EliminarProveedor(int id){
         String sql="DELETE FROM proveedores WHERE id=?";
         try{
@@ -111,7 +116,7 @@ public class ProveedorDAO {
         }
     }
     
-    
+    //Este metodo busca un proveedor por el numero de cuit
     public Proveedor BuscarProveedor(long cuit){
         Proveedor prov=new Proveedor();
         String sql="SELECT * FROM proveedores WHERE cuit=?";

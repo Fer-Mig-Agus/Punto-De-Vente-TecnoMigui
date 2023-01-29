@@ -1,7 +1,7 @@
 
 package Reportes;
 
-
+//Importo los paquetes que necesito
 import Modelo.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +14,8 @@ import org.jfree.data.general.DefaultPieDataset;
 
 public class Grafico {
     
+    //Este metodo genera un grafico con todas las ventas realizadas
+    //en dicha fecha, toma como parametro la fecha seleccionada
     public static void Graficar(String fecha){
         Connection con;
         Conexion cn=new Conexion();

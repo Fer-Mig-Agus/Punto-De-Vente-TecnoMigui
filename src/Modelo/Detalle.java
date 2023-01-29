@@ -1,6 +1,7 @@
 
 package Modelo;
 
+//Esta clase toma los detalles de la venta, para luego hacer el ticket
 
 public class Detalle {
     

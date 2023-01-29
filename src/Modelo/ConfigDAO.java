@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Importo los paquete necesarios
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +8,13 @@ import java.sql.SQLException;
 
 
 public class ConfigDAO {
-    
+    //Creo las varibales globales para la conexion
     Connection con;
     Conexion cn=new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     
-    
+    //Actualza los datos de la empresa
     public boolean ActualizarDatos(Config conf){
         String sql="UPDATE config SET cuit=?,nombre=?,telefono=?, direccion=?, tipoDeEmpresa=? WHERE id=?";
         try{
@@ -31,6 +31,8 @@ public class ConfigDAO {
         }catch(SQLException e){
             System.out.println(e.toString());
             return false;
+            //El finally es para que cuando termine de hacer la consulta, 
+            //la conexion se cierre, pasa los mismmo en los demas metodos
         }finally{
             try{
                 con.close();
@@ -40,6 +42,7 @@ public class ConfigDAO {
         }
     }
     
+    //Busca los datos de la empresa, y retorna un objeto
     public Config BuscarDatos(){
         Config conf=new Config();
         String sql="SELECT * FROM config";

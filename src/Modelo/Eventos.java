@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Importo los paquetes que necesito
 import java.awt.event.KeyEvent;
 import javax.swing.JTextField;
 

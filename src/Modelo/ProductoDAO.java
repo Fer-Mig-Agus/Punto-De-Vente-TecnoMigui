@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Importo los paquetes que necesito
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,12 +10,13 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 public class ProductoDAO {
-    
+    //Creo las variables globales para la conexion
     Connection con;
     Conexion cn=new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     
+    //Este metodo guarda los productos, retorna true si lo hizo con exito
     public boolean GuardarProductos(Producto prod){
         String sql="INSERT INTO productos (codigo,descripcion,cantidad,proveedor,categoria,precioCosto,porcentaje,precioFinal,fecha) VALUES (?,?,?,?,?,?,?,?,?)";
         try{
@@ -38,6 +39,8 @@ public class ProductoDAO {
         }
     }
     
+    //Este metodo consulta el proveedor a la base de datos, para guardarlos en
+    //los ComboBox de la seccion de productos
     public void ConsultarProveedor(JComboBox proveedor){
         String sql="SELECT empresa FROM proveedores";
         try{
@@ -51,7 +54,8 @@ public class ProductoDAO {
             System.out.println(e.toString());
         }
     }
-    
+    //Este metodo consulta la categoria a la base de datos, para guardarlos en
+    //los ComboBox de la seccion de productos
     public void ConsultarCategoria(JComboBox categoria){
         String sql="SELECT nombre FROM categorias";
         try{
@@ -66,6 +70,7 @@ public class ProductoDAO {
         }
     }
     
+    //Este metodo lista los productos, retorna la lista
     public List ListarProductos(){
         List<Producto> ListaProductos=new ArrayList();
         String sql="SELECT * FROM productos";
@@ -94,6 +99,7 @@ public class ProductoDAO {
         
     }
     
+    //Elimina un producto, lo hace usando el ID
     public boolean EliminarProducto(int id){
         String sql="DELETE FROM productos WHERE id=?";
         try{
@@ -105,6 +111,8 @@ public class ProductoDAO {
         }catch(SQLException e){
             System.out.println(e.toString());
             return false;
+            //El finally es para que cuando termine de hacer la consulta, 
+            //la conexion se cierre, pasa los mismmo en los demas metodos
         }finally{
             try{
                 con.close();
@@ -114,6 +122,7 @@ public class ProductoDAO {
         }
     }
     
+    //Actualiza un producto usando un objeto que toma por parametro
     public boolean ActualizarProducto(Producto prod){
         String sql="UPDATE productos SET cantidad=?,proveedor=?,precioCosto=?,porcentaje=?,precioFinal=? WHERE id=?";
         try{
@@ -138,7 +147,7 @@ public class ProductoDAO {
             }
         }
     }
-    
+    //Busca un producto usando el codigo
     public Producto BuscarProducto(long codigo){
         Producto prod=new Producto();
         String sql="SELECT * FROM productos WHERE codigo=?";

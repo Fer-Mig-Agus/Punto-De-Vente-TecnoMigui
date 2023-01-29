@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Importo todo lo necesario
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-    
+    //Creo las variables globales para la conexion con la BD
     Connection con;
     Conexion cn=new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     
-    
+    //Guarda un nuevo cliente, retorna true si se guardo con exito
     public boolean GuardarClientes(Cliente cli){
         String sql="INSERT INTO clientes(dni,nombre,telefono,direccion,fecha) VALUES (?,?,?,?,?)";
         try{
@@ -31,6 +31,8 @@ public class ClienteDAO {
         }catch(SQLException e){
             System.out.println(e.toString());
             return false;
+            //El finally es para que cuando termine de hacer la consulta, 
+            //la conexion se cierre, pasa los mismmo en los demas metodos
         }finally{
             try{
                 con.close();
@@ -40,7 +42,7 @@ public class ClienteDAO {
         }
         
     }
-    
+    //Lista los clientes, retorna la lista llena de objetos
     public List ListarCliente(){
         List<Cliente> ListaClientes=new ArrayList();
         String sql= "SELECT * FROM clientes";
@@ -63,7 +65,7 @@ public class ClienteDAO {
         
         return ListaClientes;
     }
-    
+    //Actualiza un cliente, recibe el cliente a modificar
     public boolean ActualizarCliente(Cliente cli){
         String sql="UPDATE clientes SET telefono=?,direccion=? WHERE id=?";
         try{
@@ -85,7 +87,7 @@ public class ClienteDAO {
             }
         }
     }
-    
+    //Elimina un cliente, teniendo en cuenta su ID
     public boolean EliminarCliente(int id){
         String sql="DELETE FROM clientes WHERE id=?";
         try{
@@ -105,7 +107,7 @@ public class ClienteDAO {
             }
         }
     }
-    
+    //Busca un cliente por su numero de dni, retorna el objeto
     public Cliente BuscarCliente(long dni){
         Cliente cli=new Cliente();
         String sql="SELECT * FROM clientes WHERE dni=?";

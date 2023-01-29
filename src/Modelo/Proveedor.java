@@ -1,6 +1,7 @@
 
 package Modelo;
 
+//Esta es una clase para poder crear los objetos de proveedor, con todos sus campos
 public class Proveedor {
     
     private int id;

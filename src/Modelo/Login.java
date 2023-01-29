@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Esta es una clase para poder crear los objetos de login, con todos sus campos
 public class Login {
     
     private int id;

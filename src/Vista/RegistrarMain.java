@@ -1,21 +1,23 @@
 
 package Vista;
-
+//Importo los paquetes que necesito
 import Modelo.Login;
 import Modelo.LoginDAO;
 import javax.swing.JOptionPane;
 
 public class RegistrarMain extends javax.swing.JFrame {
 
-    Login lg=new Login();
+    //Creo las variables globales
+    Login login=new Login();
     LoginDAO loginDao=new LoginDAO();
     
-    
+    //Metodo constructor
     public RegistrarMain() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
     
+    //Este metodo valida los campos y luego lo agrega como un nuevo usuario
     public void validar(){
         String correo=txtCorreoRegistrar.getText();
         String pass=txtPassRegistrar.getText();
@@ -23,11 +25,11 @@ public class RegistrarMain extends javax.swing.JFrame {
         String rol=cbxRolRegistrar.getSelectedItem().toString();
         
         if(!"".equals(correo) && !"".equals(pass) && !"".equals(nom)){
-            lg.setNombre(nom);
-            lg.setCorreo(correo);
-            lg.setPass(pass);
-            lg.setRol(rol);
-            loginDao.Registrar(lg);
+            login.setNombre(nom);
+            login.setCorreo(correo);
+            login.setPass(pass);
+            login.setRol(rol);
+            loginDao.Registrar(login);
             JOptionPane.showMessageDialog(null, "Usuario registrado con exito");
             dispose();
         }else{

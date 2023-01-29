@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Importo los paquetes que necesito
 import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,12 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class LoginDAO {
-    
+    //Creo las variables globlales para la conexion
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Conexion cn=new Conexion();
     
+    //Este programa consulta a la BD si el usuario esta registrado
+    //Retorna un objeto con los datos
     public Login logear(String correo, String pass){
         Login lg=new Login();
         String slq="SELECT * FROM usuarios WHERE correo =? AND pass=?";
@@ -38,8 +40,9 @@ public class LoginDAO {
         return lg;
     }
     
+    //Esta funcion registra un nuevo usuario
     public boolean Registrar(Login reg){
-        String sql="INSERT INTO usuarios(nombre,correo,pass,rol) VALUE (?,?,?,?)";
+        String sql="INSERT INTO usuarios(nombre,correo,pass,rol) VALUES (?,?,?,?)";
         try{
             con=cn.getConnection();
             ps=con.prepareStatement(sql);
@@ -55,6 +58,7 @@ public class LoginDAO {
         }
     }
     
+    //Este metodo lista todos los usuarios, retorna la lista completa
     public List ListaUsuario(){
         List<Login> ListaUsuarios = new ArrayList();
         String sql="SELECT * FROM usuarios";
@@ -78,6 +82,7 @@ public class LoginDAO {
         return ListaUsuarios;
     }
     
+    //Este metodo elimina un usuario, usando su ID
     public boolean EliminarUsuario(int id){
         String sql="DELETE FROM usuarios WHERE id=?";
         try{

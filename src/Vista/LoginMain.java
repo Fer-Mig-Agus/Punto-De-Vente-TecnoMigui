@@ -1,21 +1,24 @@
 
 package Vista;
 
+//Importo los paquetes que necesito
 import Modelo.Login;
 import Modelo.LoginDAO;
 import javax.swing.JOptionPane;
 
 public class LoginMain extends javax.swing.JFrame {
 
+    //Creo las varibales globales 
     Login lg=new Login();
     LoginDAO loginDao=new LoginDAO();
     
-    
+    //Metodo constructor
     public LoginMain() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
     
+    //Este metodo valida los campos y verifica si el usuario es correcto
     public void validar(){
         String correo=txtCorreo.getText();
         String pass=String.valueOf(txtPass.getPassword());

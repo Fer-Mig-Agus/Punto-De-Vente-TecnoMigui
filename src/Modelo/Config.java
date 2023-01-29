@@ -1,6 +1,6 @@
 
 package Modelo;
-
+//Esta es una clase para poder crear los objetos de config, con todos sus campos
 public class Config {
     
     private int id;

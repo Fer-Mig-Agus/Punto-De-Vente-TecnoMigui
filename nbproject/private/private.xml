@@ -5,9 +5,12 @@
         <group>
             <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Modelo/ClienteDAO.java</file>
             <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Modelo/Cliente.java</file>
-            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Modelo/Conexion.java</file>
+            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Vista/RegistrarMain.java</file>
+            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Modelo/Categoria.java</file>
+            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Modelo/CategoriaDAO.java</file>
+            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Modelo/LoginDAO.java</file>
             <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Vista/SistemaMainTecno.java</file>
-            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/principal/PuntoTecnoMigui.java</file>
+            <file>file:/C:/Desarrollo%20WEB/Proyectos%20Java/PuntoTecnoMigui/src/Vista/LoginMain.java</file>
         </group>
     </open-files>
 </project-private>
